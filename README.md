@@ -106,3 +106,4 @@ DB_PORT=5432
 ```
 
 Then `python manage.py migrate`.
+# liafe-project
