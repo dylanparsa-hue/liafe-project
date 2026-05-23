@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Academy — {{ site.company_name }}{% endblock %}
+{% block meta_description %}{{ service.seo_description|default:service.short_description }}{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-page {% if service.hero_image %}has-photo{% endif %}">
+  {% if service.hero_image %}<div class="hero-photo-bg" style="background-image:url('{{ service.hero_image.url }}');"></div>{% endif %}
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}">Home</a>
+      <span style="opacity:.4;">/</span>
+      <span>Services</span>
+      <span style="opacity:.4;">/</span>
+      <span style="color:var(--gold-soft);">Academy</span>
+    </div>
+    <span class="eyebrow reveal-js" style="color:var(--gold-soft);">Academy</span>
+    <h1 class="reveal-js d1" style="margin-top:16px;">{{ service.hero_title|default:"Professional Training for the Modern Finance Practitioner" }}</h1>
+    <p class="lede reveal-js d2">{{ service.hero_description|default:"The Academy is LIAFE's education wing, offering executive and structured professional training both in-person and online through webinars, workshops, and e-learning." }}</p>
+    <div style="margin-top:36px;" class="reveal-js d3">
+      <a href="#courses" class="btn btn-primary btn-lg">Explore Programmes</a>
+      <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg" style="margin-left:12px;">Enquire Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY MODES -->
+<section class="section-tight" style="border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="grid grid-4" style="gap:16px;">
+      {% for item in delivery_modes %}
+      <div class="card reveal-js d{{ forloop.counter }}" style="padding:20px;">
+        {% if item.icon_class %}<div class="card-icon" style="margin-bottom:12px;">{% include 'partials/icons.html' with icon=item.icon_class size=20 %}</div>{% endif %}
+        <h4 style="font-size:15px;">{{ item.title }}</h4>
+        <p style="margin-top:6px;font-size:13px;">{{ item.description }}</p>
+      </div>
+      {% empty %}
+      <div class="card reveal-js" style="padding:20px;"><h4 style="font-size:15px;">Delivery modes coming soon</h4></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- COURSE CATEGORIES -->
+<section class="section" id="courses">
+  <div class="container">
+    <div style="text-align:center;max-width:640px;margin:0 auto 56px;" class="reveal-js">
+      <span class="eyebrow center">Course Catalogue</span>
+      <h2 style="margin-top:16px;">Four disciplines. Every level.</h2>
+      <p style="margin-top:16px;">From foundations to executive practice — structured learning designed around real-world finance.</p>
+    </div>
+    <div class="grid grid-2" style="gap:24px;">
+      {% for cat in categories %}
+      <div class="card reveal-js d{{ forloop.counter|divisibleby:2|yesno:'2,1' }}" style="padding:0;overflow:hidden;">
+        {% if cat.image %}
+        <div style="aspect-ratio:16/7;overflow:hidden;"><img src="{{ cat.image.url }}" alt="{{ cat.title }}" style="width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);"></div>
+        {% else %}
+        <div class="placeholder" style="aspect-ratio:16/7;border-radius:0;"><span class="ph-label">{{ cat.title|lower }}</span></div>
+        {% endif %}
+        <div style="padding:24px 28px 28px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+            {% if cat.delivery_method %}<span class="tag-pill">{{ cat.delivery_method }}</span>{% endif %}
+            {% if cat.duration %}<span class="tag-pill">{{ cat.duration }}</span>{% endif %}
+            {% if cat.level %}<span class="tag-pill gold">{{ cat.level }}</span>{% endif %}
+          </div>
+          <h3 style="font-size:clamp(18px,1.8vw,22px);">{{ cat.title }}</h3>
+          <p style="margin-top:10px;font-size:14px;line-height:1.65;">{{ cat.description }}</p>
+          {% if cat.button_link %}
+          <a href="{{ cat.button_link }}" class="btn btn-ghost btn-sm" style="margin-top:18px;">
+            {{ cat.button_text|default:"Learn More" }}
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          {% else %}
+          <a href="{% url 'contact' %}" class="btn btn-ghost btn-sm" style="margin-top:18px;">
+            {{ cat.button_text|default:"Learn More" }}
+            <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="coming-soon">
+        <h3>Courses coming soon</h3>
+        <p style="margin-top:12px;">Our programme catalogue is being finalised. Contact us to register your interest.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary" style="margin-top:24px;">Get in touch</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-tight">
+  <div class="container">
+    <div class="cta-band reveal-js">
+      <h2>{{ service.cta_title|default:"Ready to develop your team?" }}</h2>
+      <div class="ctas">
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">{{ service.cta_button_text|default:"Enquire About Training" }}</a>
+        <a href="{% url 'home' %}" class="btn btn-outline-light">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

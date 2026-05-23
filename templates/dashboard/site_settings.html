@@ -1,0 +1,154 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Site Settings{% endblock %}
+{% block topbar_title %}Site Settings{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:overview' %}" class="tb-btn tb-btn-outline">← Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Site Settings</span>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="db-form">
+  {% csrf_token %}
+
+  <!-- Identity -->
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Identity</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Company Name</label>
+          {{ form.company_name }}
+          {% if form.company_name.errors %}<div class="form-error">{{ form.company_name.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Short Name</label>
+          {{ form.short_name }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Tagline</label>
+          {{ form.tagline }}
+        </div>
+      </div>
+
+      <div class="form-grid" style="margin-top:16px;">
+        <div class="form-field">
+          <label class="form-label">Logo</label>
+          <div class="file-input-wrap">
+            {{ form.logo }}
+            {% if form.instance.logo %}
+            <img src="{{ form.instance.logo.url }}" class="img-preview" alt="Logo preview">
+            <div class="img-preview-label">Current logo</div>
+            {% endif %}
+          </div>
+          <div class="form-hint">{{ form.logo.help_text }}</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Favicon</label>
+          <div class="file-input-wrap">
+            {{ form.favicon }}
+            {% if form.instance.favicon %}
+            <img src="{{ form.instance.favicon.url }}" class="img-preview" alt="Favicon preview" style="max-height:48px;">
+            {% endif %}
+          </div>
+          <div class="form-hint">{{ form.favicon.help_text }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Images -->
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Default Images</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Hero Background Image</label>
+          <div class="form-hint" style="margin-bottom:6px;">Used as fallback when no hero slides are active.</div>
+          <div class="file-input-wrap">
+            {{ form.hero_background_image }}
+            {% if form.instance.hero_background_image %}
+            <img src="{{ form.instance.hero_background_image.url }}" class="img-preview" alt="Hero preview">
+            {% endif %}
+          </div>
+          <div class="form-hint">{{ form.hero_background_image.help_text }}</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Default Page Banner</label>
+          <div class="file-input-wrap">
+            {{ form.default_page_banner }}
+            {% if form.instance.default_page_banner %}
+            <img src="{{ form.instance.default_page_banner.url }}" class="img-preview" alt="Banner preview">
+            {% endif %}
+          </div>
+          <div class="form-hint">{{ form.default_page_banner.help_text }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Info -->
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Contact Information</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Phone</label>{{ form.phone }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Email</label>{{ form.email }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Address</label>{{ form.address }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Working Hours</label>{{ form.working_hours }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Media -->
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Social Media</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Facebook URL</label>{{ form.facebook_url }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Instagram URL</label>{{ form.instagram_url }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">LinkedIn URL</label>{{ form.linkedin_url }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">YouTube URL</label>{{ form.youtube_url }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Footer</div></div>
+    <div class="db-card-body">
+      <div class="form-field" style="margin-bottom:12px;">
+        <label class="form-label">Footer Text</label>{{ form.footer_text }}
+      </div>
+      <div class="form-field">
+        <label class="form-label">Copyright Text</label>{{ form.copyright_text }}
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">Save Settings</button>
+      <a href="{% url 'dashboard:overview' %}" class="tb-btn tb-btn-outline">Cancel</a>
+    </div>
+  </div>
+
+</form>
+{% endblock %}

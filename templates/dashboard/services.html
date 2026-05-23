@@ -1,0 +1,68 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Services{% endblock %}
+{% block topbar_title %}Services{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:service_add' %}" class="tb-btn tb-btn-primary">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  Add Service
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Services</span>
+</div>
+
+<div class="db-card">
+  {% if services %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Status</th>
+          <th>Order</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for svc in services %}
+        <tr>
+          <td>
+            <div style="font-weight:500;">{{ svc.title }}</div>
+            <div style="font-size:12px;color:var(--muted);">{{ svc.short_description|truncatechars:60 }}</div>
+          </td>
+          <td style="font-family:monospace;font-size:12px;color:var(--muted);">{{ svc.slug }}</td>
+          <td>
+            <span class="badge {% if svc.is_active %}badge-green{% else %}badge-gray{% endif %}">
+              {% if svc.is_active %}Active{% else %}Hidden{% endif %}
+            </span>
+          </td>
+          <td style="color:var(--muted);">{{ svc.order }}</td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:service_detail' svc.pk %}" class="tbl-btn tbl-btn-primary">Manage</a>
+              <a href="{% url 'dashboard:service_edit' svc.pk %}" class="tbl-btn">Edit Info</a>
+              <a href="{% url 'dashboard:service_delete' svc.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+    </svg>
+    <div class="empty-title">No services yet</div>
+    <div class="empty-text">Add your first service to display it on the website.</div>
+    <a href="{% url 'dashboard:service_add' %}" class="tb-btn tb-btn-primary">Add Service</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

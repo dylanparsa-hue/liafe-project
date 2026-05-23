@@ -1,0 +1,88 @@
+{% load static %}
+<header class="site-header">
+  <div class="container">
+    <nav class="nav">
+
+      <!-- Brand -->
+      <a href="{% url 'home' %}" class="brand">
+        {% if site.logo %}
+          <img src="{{ site.logo.url }}" alt="{{ site.short_name }}" style="height:40px;width:auto;">
+        {% else %}
+          <div class="brand-mark">L</div>
+          <div class="brand-text">
+            <span class="name">{{ site.short_name }}</span>
+            <span class="sub">London</span>
+          </div>
+        {% endif %}
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="nav-links">
+        <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+
+        <div class="dropdown">
+          <button type="button" class="nav-link dropdown-toggle" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;font:inherit;color:inherit;">
+            Services
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="{% url 'shariah' %}" class="dropdown-item">
+              <div class="dd-icon">{% include 'partials/icons.html' with icon="Shariah" size=18 %}</div>
+              <div><div class="dd-title">Shariah Advisory</div><div class="dd-sub">Compliance, structuring & Shariah audit</div></div>
+            </a>
+            <a href="{% url 'academy' %}" class="dropdown-item">
+              <div class="dd-icon">{% include 'partials/icons.html' with icon="Academy" size=18 %}</div>
+              <div><div class="dd-title">Academy</div><div class="dd-sub">Executive education & professional training</div></div>
+            </a>
+            <a href="{% url 'research' %}" class="dropdown-item">
+              <div class="dd-icon">{% include 'partials/icons.html' with icon="Research" size=18 %}</div>
+              <div><div class="dd-title">Research House</div><div class="dd-sub">R&D in Islamic finance & fintech</div></div>
+            </a>
+            <a href="{% url 'publication' %}" class="dropdown-item">
+              <div class="dd-icon">{% include 'partials/icons.html' with icon="Publication" size=18 %}</div>
+              <div><div class="dd-title">Publication</div><div class="dd-sub">Books, reports & thought leadership</div></div>
+            </a>
+          </div>
+        </div>
+
+        <a href="{% url 'contact' %}" class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
+
+        {% for item in nav_items %}
+        <a href="{{ item.get_url }}"
+           class="nav-link {% if request.path == item.get_url %}active{% endif %}"
+           {% if item.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
+        {% endfor %}
+      </div>
+
+      <div class="nav-cta">
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-sm" style="display:none;" id="nav-cta-desk">Consult Us</a>
+        <button class="menu-btn" id="menu-btn" aria-label="Open menu">
+          <svg id="menu-icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="menu-icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+    </nav>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="{% url 'home' %}" class="m-item">Home</a>
+  <span class="m-item" style="cursor:default;color:var(--muted);font-size:14px;font-family:var(--font-sans);letter-spacing:.12em;text-transform:uppercase;">Services</span>
+  <a href="{% url 'shariah' %}" class="m-sub">Shariah Advisory</a>
+  <a href="{% url 'academy' %}" class="m-sub">Academy</a>
+  <a href="{% url 'research' %}" class="m-sub">Research House</a>
+  <a href="{% url 'publication' %}" class="m-sub">Publication</a>
+  <a href="{% url 'contact' %}" class="m-item">Contact Us</a>
+  {% for item in nav_items %}
+  <a href="{{ item.get_url }}" class="m-item" {% if item.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
+  {% endfor %}
+  <div style="margin-top:24px;">
+    <a href="{% url 'contact' %}" class="btn btn-primary" style="width:100%;justify-content:center;">Consult Us</a>
+  </div>
+</div>
+
+<style>
+@media(min-width:861px){ #nav-cta-desk { display:inline-flex !important; } }
+</style>

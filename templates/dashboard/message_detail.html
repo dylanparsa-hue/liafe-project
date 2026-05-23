@@ -1,0 +1,56 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Message from {{ obj.name }}{% endblock %}
+{% block topbar_title %}Message from {{ obj.name }}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:messages' %}" class="tb-btn tb-btn-outline">← Back</a>
+<a href="{% url 'dashboard:message_delete' obj.pk %}" class="tb-btn tb-btn-danger">Delete</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:messages' %}">Messages</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{{ obj.name }}</span>
+</div>
+
+<div class="db-card" style="max-width:720px;">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">{{ obj.subject|default:"(no subject)" }}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px;">Received {{ obj.created_at|date:"F j, Y" }} at {{ obj.created_at|time:"H:i" }}</div>
+    </div>
+    <span class="badge {% if obj.is_read %}badge-gray{% else %}badge-red{% endif %}">
+      {% if obj.is_read %}Read{% else %}Unread{% endif %}
+    </span>
+  </div>
+  <div class="db-card-body">
+    <div class="detail-grid" style="margin-bottom:20px;">
+      <div class="detail-field">
+        <div class="detail-label">Name</div>
+        <div class="detail-value">{{ obj.name }}</div>
+      </div>
+      <div class="detail-field">
+        <div class="detail-label">Email</div>
+        <div class="detail-value"><a href="mailto:{{ obj.email }}">{{ obj.email }}</a></div>
+      </div>
+      {% if obj.phone %}
+      <div class="detail-field">
+        <div class="detail-label">Phone</div>
+        <div class="detail-value">{{ obj.phone }}</div>
+      </div>
+      {% endif %}
+      <div class="detail-field">
+        <div class="detail-label">Subject</div>
+        <div class="detail-value">{{ obj.subject|default:"—" }}</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <div class="detail-label" style="margin-bottom:6px;">Message</div>
+      <div class="detail-message">{{ obj.message }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Research House{% endblock %}
+{% block topbar_title %}Research House{% endblock %}
+{% block topbar_actions %}
+{% if research_svc %}<a href="{% url 'dashboard:service_detail' research_svc.pk %}" class="tb-btn tb-btn-outline">Service Page Settings</a>{% endif %}
+<a href="{% url 'dashboard:research_project_add' %}" class="tb-btn tb-btn-primary">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  Add Project
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Research House</span>
+</div>
+
+<!-- Research Categories -->
+<div class="db-card" style="margin-bottom:24px;">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Research Categories</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">e.g. Islamic Finance, Social Sciences, FinTech</div>
+    </div>
+    <a href="{% url 'dashboard:research_category_add' %}" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Category
+    </a>
+  </div>
+  {% if categories %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>Title</th><th>Description</th><th>Projects</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr>
+          <td style="font-weight:500;">{{ cat.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ cat.description|truncatechars:70 }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ cat.projects.count }}</td>
+          <td><span class="badge {% if cat.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if cat.is_active %}Active{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:research_category_edit' cat.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:research_category_delete' cat.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding:28px;">
+    <div class="empty-title">No categories yet</div>
+    <a href="{% url 'dashboard:research_category_add' %}" class="tb-btn tb-btn-primary">Add Category</a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Research Projects -->
+<div class="db-card">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Research Projects</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Individual projects shown in the Research House</div>
+    </div>
+    <a href="{% url 'dashboard:research_project_add' %}" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Project
+    </a>
+  </div>
+  {% if projects %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Year</th><th>Active</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for proj in projects %}
+        <tr>
+          <td>
+            <div style="font-weight:500;">{{ proj.title|truncatechars:50 }}</div>
+            <div style="font-size:12px;color:var(--muted);">{{ proj.short_description|truncatechars:50 }}</div>
+          </td>
+          <td style="color:var(--muted);font-size:13px;">{{ proj.category.title }}</td>
+          <td><span class="badge badge-blue">{{ proj.get_research_status_display }}</span></td>
+          <td style="color:var(--muted);font-size:13px;">{{ proj.year|default:"—" }}</td>
+          <td>
+            <span class="badge {% if proj.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if proj.is_active %}Active{% else %}Hidden{% endif %}</span>
+            {% if proj.is_featured %}<span class="badge badge-orange" style="margin-left:4px;">Featured</span>{% endif %}
+          </td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:research_project_edit' proj.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:research_project_delete' proj.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding:28px;">
+    <div class="empty-title">No research projects yet</div>
+    <a href="{% url 'dashboard:research_project_add' %}" class="tb-btn tb-btn-primary">Add Project</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

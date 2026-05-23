@@ -1,0 +1,85 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Feature{% else %}Add Feature{% endif %} — {{ svc.title }}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Item{% else %}Add Item{% endif %} — {{ svc.title }}{% endblock %}
+{% block topbar_actions %}<a href="{% url 'dashboard:service_detail' svc.pk %}" class="tb-btn tb-btn-outline">← Back to {{ svc.title }}</a>{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:services' %}">Services</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:service_detail' svc.pk %}">{{ svc.title }}</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit{% else %}Add{% endif %} Item</span>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="db-card" style="max-width:720px;margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Item Content</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field form-full">
+          <label class="form-label">Title <span class="required">*</span></label>
+          {{ form.title }}{% if form.title.errors %}<div class="form-error">{{ form.title.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Short Description <span class="required">*</span></label>
+          {{ form.description }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Full Description</label>
+          {{ form.full_description }}
+          <div class="form-hint">Optional extended text shown on detail views.</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Icon Name</label>
+          {{ form.icon_class }}
+          <div class="form-hint">e.g. Shield, BookOpen, Search, Layers — matches the site icon set.</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Item Type</label>
+          {{ form.item_type }}
+          <div class="form-hint">process = numbered step, card = feature card, delivery = academy delivery mode, value = research value.</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Image</label>
+          <div class="file-input-wrap">
+            {{ form.image }}
+            {% if obj and obj.image %}<img src="{{ obj.image.url }}" class="img-preview" alt="">{% endif %}
+          </div>
+          <div class="form-hint">{{ form.image.help_text }}</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Display Order</label>{{ form.order }}
+        </div>
+        <div class="form-field" style="justify-content:flex-end;">
+          <div class="check-row">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">Active (visible on site)</label></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Add Item{% endif %}</button>
+      <a href="{% url 'dashboard:service_detail' svc.pk %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}<a href="{% url 'dashboard:feature_delete' svc.pk obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete</a>{% endif %}
+    </div>
+  </div>
+
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Pre-select item_type from query param on add
+(function(){
+  var sel = document.querySelector('select[name="item_type"]');
+  var params = new URLSearchParams(window.location.search);
+  var t = params.get('type');
+  if (sel && t && !sel.value) {
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === t) { sel.selectedIndex = i; break; }
+    }
+  }
+})();
+</script>
+{% endblock %}

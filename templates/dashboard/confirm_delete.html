@@ -1,0 +1,32 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Confirm Delete{% endblock %}
+{% block topbar_title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<div class="confirm-box">
+  <div class="db-card">
+    <div class="db-card-body" style="text-align:center;padding:36px 28px;">
+      <div class="confirm-icon-wrap" style="margin:0 auto 16px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+      </div>
+      <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:8px;">Delete this item?</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:24px;">
+        <strong style="color:var(--text);">{{ obj_name }}</strong><br>
+        This action cannot be undone.
+      </div>
+      <form method="post" style="display:inline;">
+        {% csrf_token %}
+        <div style="display:flex;gap:10px;justify-content:center;">
+          <button type="submit" class="tb-btn tb-btn-danger">Yes, Delete</button>
+          <a href="{{ cancel_url }}" class="tb-btn tb-btn-outline">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

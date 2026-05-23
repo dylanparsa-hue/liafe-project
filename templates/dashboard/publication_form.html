@@ -1,0 +1,126 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Publication{% else %}Add Publication{% endif %}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Publication{% else %}Add Publication{% endif %}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:publications' %}" class="tb-btn tb-btn-outline">← Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:publications' %}">Publications</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit{% else %}Add{% endif %}</span>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Publication Details</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field form-full">
+          <label class="form-label">Title <span class="required">*</span></label>
+          {{ form.title }}{% if form.title.errors %}<div class="form-error">{{ form.title.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Slug <span class="required">*</span></label>
+          {{ form.slug }}{% if form.slug.errors %}<div class="form-error">{{ form.slug.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Type <span class="required">*</span></label>
+          {{ form.publication_type }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Author <span class="required">*</span></label>
+          {{ form.author }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Co-Authors</label>{{ form.co_authors }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Published Date</label>{{ form.published_date }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Short Description</label>{{ form.short_description }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Files &amp; Links</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Cover Image</label>
+          <div class="file-input-wrap">
+            {{ form.cover_image }}
+            {% if obj and obj.cover_image %}
+            <img src="{{ obj.cover_image.url }}" class="img-preview" alt="" style="max-height:100px;">
+            {% endif %}
+          </div>
+          <div class="form-hint">{{ form.cover_image.help_text }}</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">PDF File</label>
+          <div class="file-input-wrap">
+            {{ form.pdf_file }}
+            {% if obj and obj.pdf_file %}
+            <div style="font-size:12px;color:var(--success);margin-top:4px;">
+              ✓ File uploaded: <a href="{{ obj.pdf_file.url }}" target="_blank" style="color:var(--primary);">View PDF</a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">External Link</label>{{ form.external_link }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Identifiers &amp; Tags</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">ISBN</label>{{ form.isbn }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">DOI</label>{{ form.doi }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Tags</label>{{ form.tags }}
+          <div class="form-hint">Comma-separated, e.g. finance, halal, research</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Visibility</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <div class="check-row">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">Active (visible on site)</label></div>
+        </div>
+        <div class="form-field">
+          <div class="check-row">{{ form.is_featured }}<label for="{{ form.is_featured.id_for_label }}">Featured on homepage</label></div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Order</label>{{ form.order }}
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Create Publication{% endif %}</button>
+      <a href="{% url 'dashboard:publications' %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}<a href="{% url 'dashboard:publication_delete' obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete</a>{% endif %}
+    </div>
+  </div>
+
+</form>
+{% endblock %}

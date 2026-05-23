@@ -1,0 +1,80 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Navigation Menu{% endblock %}
+{% block topbar_title %}Navigation Menu{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:nav_item_add' %}" class="tb-btn tb-btn-primary">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  Add Menu Item
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Navigation Menu</span>
+</div>
+
+<div class="db-card" style="margin-bottom:14px;padding:12px 18px;font-size:13px;color:var(--muted);border-left:3px solid var(--primary);">
+  These items are added to the website top navigation bar after the fixed <strong>Home</strong>, <strong>Services</strong>, and <strong>Contact</strong> links.
+  Use <strong>Order</strong> to control their position. Active items appear on the site; inactive items are hidden.
+</div>
+
+<div class="db-card">
+  {% if items %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead>
+        <tr>
+          <th>Label</th>
+          <th>Links To</th>
+          <th>Order</th>
+          <th>New Tab</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td style="font-weight:500;">{{ item.label }}</td>
+          <td style="font-size:12px;font-family:monospace;color:var(--muted);">
+            {% if item.page %}
+              <a href="{{ item.page.get_absolute_url }}" target="_blank" style="color:var(--primary);">{{ item.page.get_absolute_url }}</a>
+              <span style="color:var(--muted);"> (page: {{ item.page.title }})</span>
+            {% elif item.external_url %}
+              <a href="{{ item.external_url }}" target="_blank" style="color:var(--primary);">{{ item.external_url }}</a>
+            {% else %}
+              <span style="color:#F59E0B;">⚠ No link set</span>
+            {% endif %}
+          </td>
+          <td style="color:var(--muted);">{{ item.order }}</td>
+          <td>{% if item.open_in_new_tab %}<span class="badge badge-blue">Yes</span>{% else %}<span style="color:var(--muted);">No</span>{% endif %}</td>
+          <td>
+            <span class="badge {% if item.is_active %}badge-green{% else %}badge-gray{% endif %}">
+              {% if item.is_active %}Active{% else %}Hidden{% endif %}
+            </span>
+          </td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:nav_item_edit' item.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:nav_item_delete' item.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>
+    </svg>
+    <div class="empty-title">No custom menu items yet</div>
+    <div class="empty-text">Add a menu item to have it appear in the top navigation bar alongside Home, Services, and Contact.</div>
+    <a href="{% url 'dashboard:nav_item_add' %}" class="tb-btn tb-btn-primary">Add Menu Item</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

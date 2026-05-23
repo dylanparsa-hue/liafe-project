@@ -1,0 +1,120 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Slide{% else %}Add Slide{% endif %}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Hero Slide{% else %}Add Hero Slide{% endif %}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:hero_slides' %}" class="tb-btn tb-btn-outline">← Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:hero_slides' %}">Hero Slides</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit{% else %}Add{% endif %}</span>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Slide Content</div></div>
+    <div class="db-card-body">
+      <div class="form-grid" style="margin-bottom:16px;">
+        <div class="form-field form-full">
+          <label class="form-label">Title <span class="required">*</span></label>
+          {{ form.title }}
+          {% if form.title.errors %}<div class="form-error">{{ form.title.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Subtitle</label>
+          {{ form.subtitle }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Description</label>
+          {{ form.description }}
+          <div class="form-hint">Shown below the subtitle on the slide.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Background Image</div></div>
+    <div class="db-card-body">
+      <div class="form-field">
+        <div class="file-input-wrap">
+          {{ form.background_image }}
+          {% if obj and obj.background_image %}
+          <img src="{{ obj.background_image.url }}" class="img-preview" id="bg-preview" alt="Current background">
+          <div class="img-preview-label">Current image — upload a new one to replace</div>
+          {% else %}
+          <img id="bg-preview" class="img-preview" style="display:none;" alt="">
+          {% endif %}
+        </div>
+        <div class="form-hint">{{ form.background_image.help_text }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Call to Action Buttons</div></div>
+    <div class="db-card-body">
+      <div class="form-grid" style="margin-bottom:16px;">
+        <div class="form-field">
+          <label class="form-label">Button 1 Text</label>{{ form.button_1_text }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Button 1 Link</label>{{ form.button_1_link }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Button 2 Text</label>{{ form.button_2_text }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Button 2 Link</label>{{ form.button_2_link }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Display Options</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Order</label>
+          {{ form.order }}
+          <div class="form-hint">Lower number = shown first.</div>
+        </div>
+        <div class="form-field" style="justify-content:flex-end;">
+          <div class="check-row">
+            {{ form.is_active }}
+            <label for="{{ form.is_active.id_for_label }}">Active (visible on site)</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Create Slide{% endif %}</button>
+      <a href="{% url 'dashboard:hero_slides' %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}
+      <a href="{% url 'dashboard:hero_slide_delete' obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete Slide</a>
+      {% endif %}
+    </div>
+  </div>
+
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelector('input[name="background_image"]')?.addEventListener('change', function(){
+  var preview = document.getElementById('bg-preview');
+  if(this.files[0]){
+    var reader = new FileReader();
+    reader.onload = function(e){ preview.src = e.target.result; preview.style.display = 'block'; };
+    reader.readAsDataURL(this.files[0]);
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Inquiries{% endblock %}
+{% block topbar_title %}Inquiries{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Inquiries</span>
+</div>
+
+<div class="db-card">
+  {% if inquiries %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Type</th>
+          <th>Subject</th>
+          <th>Company</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inq in inquiries %}
+        <tr>
+          <td>
+            <div style="font-weight:{% if not inq.is_read %}600{% else %}400{% endif %};">{{ inq.name }}</div>
+            <div style="font-size:12px;color:var(--muted);">{{ inq.email }}</div>
+          </td>
+          <td><span class="badge badge-blue">{{ inq.get_inquiry_type_display }}</span></td>
+          <td style="color:var(--muted);font-size:13px;">{{ inq.subject|default:"—"|truncatechars:40 }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ inq.company|default:"—" }}</td>
+          <td style="color:var(--muted);font-size:12px;white-space:nowrap;">{{ inq.created_at|date:"M d, Y" }}</td>
+          <td>
+            <span class="badge {% if inq.is_read %}badge-gray{% else %}badge-red{% endif %}">
+              {% if inq.is_read %}Read{% else %}Unread{% endif %}
+            </span>
+          </td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:inquiry_detail' inq.pk %}" class="tbl-btn tbl-btn-primary">View</a>
+              <a href="{% url 'dashboard:inquiry_delete' inq.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+    <div class="empty-title">No inquiries yet</div>
+    <div class="empty-text">Service and research inquiries submitted on the site will appear here.</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

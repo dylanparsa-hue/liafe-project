@@ -1,0 +1,65 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Menu Item{% else %}Add Menu Item{% endif %}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Menu Item{% else %}Add Menu Item{% endif %}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:navigation_menu' %}" class="tb-btn tb-btn-outline">← Navigation Menu</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:navigation_menu' %}">Navigation Menu</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit{% else %}Add{% endif %}</span>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+  <div class="db-card" style="max-width:600px;margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Menu Item Details</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+
+        <div class="form-field form-full">
+          <label class="form-label">Label <span class="required">*</span></label>
+          {{ form.label }}
+          {% if form.label.errors %}<div class="form-error">{{ form.label.errors|join:", " }}</div>{% endif %}
+          <div class="form-hint">Text shown in the navigation bar.</div>
+        </div>
+
+        <div class="form-field form-full">
+          <label class="form-label">Page</label>
+          {{ form.page }}
+          <div class="form-hint">Select a custom page to link to — OR leave blank and use an External URL below.</div>
+        </div>
+
+        <div class="form-field form-full">
+          <label class="form-label">External URL</label>
+          {{ form.external_url }}
+          <div class="form-hint">{{ form.external_url.help_text }}</div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Order</label>{{ form.order }}
+          <div class="form-hint">Lower numbers appear first.</div>
+        </div>
+
+        <div class="form-field">
+          <div class="check-row">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">Active (show in nav)</label></div>
+        </div>
+
+        <div class="form-field form-full">
+          <div class="check-row">{{ form.open_in_new_tab }}<label for="{{ form.open_in_new_tab.id_for_label }}">Open in new tab</label></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Add Item{% endif %}</button>
+      <a href="{% url 'dashboard:navigation_menu' %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}<a href="{% url 'dashboard:nav_item_delete' obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete</a>{% endif %}
+    </div>
+  </div>
+</form>
+{% endblock %}

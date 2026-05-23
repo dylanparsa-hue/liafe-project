@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ site.company_name }} — Shariah Advisory · Academy · Research · Publication{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero" id="heroSection">
+  {% if hero_slides %}
+
+  <!-- Background slides layer -->
+  <div class="hero-slider" id="heroSlider" aria-hidden="true">
+    {% for slide in hero_slides %}
+    <div class="hs-bg{% if forloop.first %} active{% endif %}"
+         {% if slide.background_image %}style="background-image:url('{{ slide.background_image.url }}');"{% endif %}>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Content layer -->
+  <div class="hero-full">
+    <div class="container">
+      <div class="hs-contents">
+        {% for slide in hero_slides %}
+        <div class="hs-content{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.counter0 }}">
+          <span class="eyebrow reveal-js" style="color:var(--gold-soft);">London Consultancy</span>
+          <h1 class="reveal-js d1" style="margin-top:16px;">{{ slide.title }}</h1>
+          {% if slide.subtitle %}
+          <p class="lede reveal-js d2">{{ slide.subtitle }}</p>
+          {% endif %}
+          {% if slide.description %}
+          <p class="lede reveal-js d2" style="margin-top:12px;font-size:clamp(14px,1.2vw,16px);opacity:.85;">{{ slide.description }}</p>
+          {% endif %}
+          <div class="ctas reveal-js d3">
+            {% if slide.button_1_text %}
+            <a href="{{ slide.button_1_link|default:'/contact/' }}" class="btn btn-primary btn-lg">
+              {{ slide.button_1_text }}
+              <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            {% endif %}
+            {% if slide.button_2_text %}
+            <a href="{{ slide.button_2_link|default:'#services' }}" class="btn btn-outline-light btn-lg">{{ slide.button_2_text }}</a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if hero_slides|length > 1 %}
+      <div class="hs-nav">
+        <button class="hs-arrow hs-prev" aria-label="Previous slide">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="hs-dots">
+          {% for slide in hero_slides %}
+          <button class="hs-dot{% if forloop.first %} active{% endif %}" data-slide="{{ forloop.counter0 }}" aria-label="Slide {{ forloop.counter }}"></button>
+          {% endfor %}
+        </div>
+        <button class="hs-arrow hs-next" aria-label="Next slide">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% else %}
+
+  <!-- Static fallback hero -->
+  <div class="hero-bg {% if sections.hero.background_image or site.hero_background_image %}has-photo{% endif %}"
+    {% if sections.hero.background_image %}style="background-image:url('{{ sections.hero.background_image.url }}');"
+    {% elif site.hero_background_image %}style="background-image:url('{{ site.hero_background_image.url }}');"{% endif %}>
+  </div>
+  <div class="hero-full">
+    <div class="container">
+      <span class="eyebrow reveal-js">London Consultancy</span>
+      <h1 class="reveal-js d1" style="margin-top:16px;">{{ sections.hero.title|default:site.company_name }}</h1>
+      <p class="lede reveal-js d2">
+        {% if sections.hero.subtitle %}{{ sections.hero.subtitle }}{% else %}Shariah Advisory &ndash; Academy &ndash; Research &amp; Development &ndash; Publications{% endif %}
+      </p>
+      <p class="lede reveal-js d2" style="margin-top:12px;font-size:clamp(14px,1.2vw,16px);opacity:.85;">
+        {% if sections.hero.description %}{{ sections.hero.description|striptags }}{% else %}The London International Academy for Excellence is a consultancy dedicated to empowering growth through professional training, impactful publications, strategic research, and expert Shariah advisory.{% endif %}
+      </p>
+      <div class="ctas reveal-js d3">
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">
+          {{ sections.hero.button_text|default:"Consult Us" }}
+          <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#services" class="btn btn-outline-light btn-lg">Explore Services</a>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="container">
+    <div class="inner">
+      <span class="label">Trusted across UK · MENA · Asia</span>
+      <div class="trust-items">
+        <span class="trust-item">AAOIFI Aligned</span>
+        <span class="trust-item">IFSB Frameworks</span>
+        <span class="trust-item">FCA Aware</span>
+        <span class="trust-item">ISRA Network</span>
+        <span class="trust-item">IsDB Partner</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="grid grid-2" style="gap:64px;align-items:center;">
+      <div class="reveal-js">
+        {% if sections.about.image %}
+        <div style="border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/5;">
+          <img src="{{ sections.about.image.url }}" alt="About LIAFE" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        {% else %}
+        <div class="placeholder" style="aspect-ratio:4/5;">
+          <span class="ph-label">London chambers photo</span>
+        </div>
+        {% endif %}
+      </div>
+      <div class="reveal-js d1">
+        <span class="eyebrow">About LIAFE</span>
+        <h2 style="margin-top:16px;">
+          {{ sections.about.title|default:"A consultancy where knowledge, innovation and integrity meet." }}
+        </h2>
+        <p style="margin-top:20px;font-size:17px;line-height:1.7;">
+          {% if sections.about.description %}{{ sections.about.description|safe }}{% else %}
+          The London International Academy for Excellence (LIAFE) is a consultancy dedicated to empowering growth through four core services: professional training through the Academy, impactful publications, strategic research, and expert Shariah advisory. We blend knowledge, innovation, and integrity to deliver solutions that matter.
+          {% endif %}
+        </p>
+        {% if about_stats %}
+        <div class="stat-strip" style="margin-top:32px;">
+          {% for stat in about_stats %}
+          <div class="stat">
+            <div class="stat-num">{{ stat.value }}{% if stat.suffix %}<span class="unit">{{ stat.suffix }}</span>{% endif %}</div>
+            <div class="stat-label">{{ stat.label }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE SERVICES -->
+<section class="section beige" id="services">
+  <div class="container">
+    <div style="text-align:center;max-width:720px;margin:0 auto 56px;" class="reveal-js">
+      <span class="eyebrow center">Core Services</span>
+      <h2 style="margin-top:16px;">{{ sections.core_services.title|default:"Four practices, one standard of excellence." }}</h2>
+      <p style="margin-top:16px;">{{ sections.core_services.subtitle|default:"Every engagement draws on the full strength of LIAFE — advisory, education, research, and publication working in concert." }}</p>
+    </div>
+    <div class="grid grid-4">
+      {% for service in services %}
+      <div class="card reveal-js d{{ forloop.counter }}">
+        {% if service.image %}
+        <div class="card-img-wrap"><img src="{{ service.image.url }}" alt="{{ service.title }}"></div>
+        {% else %}
+        <div class="card-img-wrap placeholder"><span class="ph-label">{{ service.menu_title|default:service.title|lower }}</span></div>
+        {% endif %}
+        <div class="card-icon">{% include 'partials/icons.html' with icon=service.icon_class size=22 %}</div>
+        <h4>{{ service.title }}</h4>
+        <p style="margin-top:8px;font-size:14px;">{{ service.short_description }}</p>
+        <div style="margin-top:20px;">
+          <a href="{{ service.get_absolute_url }}" class="btn btn-ghost btn-sm">
+            Know More <svg class="arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      {% for s in "1234" %}
+      <div class="card reveal-js"><div class="card-img-wrap placeholder"><span class="ph-label">service</span></div><div class="card-icon" style="background:var(--beige);"></div><h4>Service</h4><p style="margin-top:8px;font-size:14px;">Run seed_site to populate.</p></div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section">
+  <div class="container">
+    <div class="grid grid-2" style="gap:64px;margin-bottom:56px;align-items:end;">
+      <div class="reveal-js">
+        <span class="eyebrow">Why Choose LIAFE</span>
+        <h2 style="margin-top:16px;">{{ sections.why_choose_us.title|default:"Six principles that govern everything we deliver." }}</h2>
+      </div>
+      <div class="reveal-js d1">
+        <p style="font-size:17px;line-height:1.7;">{% if sections.why_choose_us.description %}{{ sections.why_choose_us.description|safe }}{% else %}From Shariah advisory to executive education, our work is shaped by a single set of principles — how we hire, how we engage, and how we measure ourselves.{% endif %}</p>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      {% for pillar in pillars %}
+      <div class="card reveal-js d{{ forloop.counter }}">
+        <div class="card-icon">{% include 'partials/icons.html' with icon=pillar.icon_class size=22 %}</div>
+        <h4>{{ pillar.title }}</h4>
+        <p style="margin-top:8px;font-size:14px;line-height:1.6;">{{ pillar.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH (navy) -->
+<section class="section navy">
+  <div class="container">
+    <div class="grid grid-2" style="gap:64px;align-items:center;">
+      <div class="reveal-js">
+        <span class="eyebrow" style="color:var(--gold-soft);">Our Approach</span>
+        <h2 style="margin-top:16px;color:#fff;">{{ sections.approach.title|default:"Faith. Finance. Evidence. Working together." }}</h2>
+        <p style="margin-top:20px;color:rgba(255,255,255,.78);font-size:17px;line-height:1.7;">
+          {% if sections.approach.description %}{{ sections.approach.description|safe }}{% else %}We sit at the intersection of classical scholarship and modern finance. Our engagements start with the client's commercial and regulatory reality and end with structures that are defensible, transparent, and durable.{% endif %}
+        </p>
+        <div style="margin-top:32px;">
+          <a href="{% url 'contact' %}" class="btn btn-outline-light">Start a conversation</a>
+        </div>
+      </div>
+      <div class="reveal-js d1">
+        {% if sections.approach.image %}
+        <div style="border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/3;"><img src="{{ sections.approach.image.url }}" alt="Our approach" style="width:100%;height:100%;object-fit:cover;"></div>
+        {% else %}
+        <div class="placeholder dark" style="aspect-ratio:4/3;"><span class="ph-label">approach photo</span></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="section-tight">
+  <div class="container">
+    <div class="cta-band reveal-js">
+      <h2>{{ sections.cta.title|default:"Ready to work with LIAFE?" }}</h2>
+      <div class="ctas">
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">{{ sections.cta.button_text|default:"Contact Us" }}</a>
+        <a href="#services" class="btn btn-outline-light">Our Services</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Course{% else %}Add Course{% endif %}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Course{% else %}Add Course{% endif %}{% endblock %}
+{% block topbar_actions %}<a href="{% url 'dashboard:academy' %}" class="tb-btn tb-btn-outline">← Academy</a>{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:academy' %}">Academy</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit Course{% else %}Add Course{% endif %}</span>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if form.errors %}
+  <div class="db-card" style="margin-bottom:16px;padding:12px 18px;border-left:3px solid var(--danger);background:#FEF2F2;">
+    <div style="font-weight:600;color:var(--danger);margin-bottom:6px;">Please fix the errors below:</div>
+    {% for field in form %}{% if field.errors %}<div style="font-size:13px;color:var(--danger);">{{ field.label }}: {{ field.errors|join:", " }}</div>{% endif %}{% endfor %}
+  </div>
+  {% endif %}
+  <div class="db-card" style="max-width:760px;margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Course Details</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field form-full">
+          <label class="form-label">Title <span class="required">*</span></label>
+          {{ form.title }}{% if form.title.errors %}<div class="form-error">{{ form.title.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Category <span class="required">*</span></label>{{ form.category }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Short Description</label>{{ form.short_description }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Delivery Method</label>{{ form.delivery_method }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Duration</label>{{ form.duration }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Level</label>{{ form.level }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Price (£)</label>{{ form.price }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Start Date</label>{{ form.start_date }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Registration Link</label>{{ form.registration_link }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Course Image</label>
+          <div class="file-input-wrap">
+            {{ form.image }}
+            {% if obj and obj.image %}<img src="{{ obj.image.url }}" class="img-preview" alt="">{% endif %}
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Display Order</label>{{ form.order }}
+        </div>
+        <div class="form-field">
+          <div class="check-row">{{ form.is_featured }}<label for="{{ form.is_featured.id_for_label }}">Featured</label></div>
+        </div>
+        <div class="form-field">
+          <div class="check-row">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">Active</label></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Add Course{% endif %}</button>
+      <a href="{% url 'dashboard:academy' %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}<a href="{% url 'dashboard:course_delete' obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete</a>{% endif %}
+    </div>
+  </div>
+</form>
+{% endblock %}

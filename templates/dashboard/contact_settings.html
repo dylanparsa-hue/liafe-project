@@ -1,0 +1,100 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Contact Page{% endblock %}
+{% block topbar_title %}Contact Page Settings{% endblock %}
+{% block topbar_actions %}
+<a href="/contact/" target="_blank" class="tb-btn tb-btn-outline" style="font-size:12px;">View Contact Page ↗</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Contact Page</span>
+</div>
+
+<div class="db-card" style="margin-bottom:12px;padding:12px 18px;font-size:13px;color:var(--muted);border-left:3px solid var(--primary);">
+  Contact phone, email, and address are managed in <a href="{% url 'dashboard:site_settings' %}">Site Settings</a>.
+  This page controls the hero, form intro text, and map embed for the contact page.
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Hero Section</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Hero Title</label>{{ form.hero_title }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Hero Subtitle</label>{{ form.hero_subtitle }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Description / Intro</label>{{ form.description }}
+          <div class="form-hint">Shown on the left side beneath the heading. Supports basic HTML.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Contact Form</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field form-full">
+          <label class="form-label">Form Intro Text</label>{{ form.contact_form_intro }}
+          <div class="form-hint">Small text shown above the contact form.</div>
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Success Message</label>{{ form.success_message }}
+          <div class="form-hint">Shown after a message is submitted.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Image &amp; Map</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Contact Page Image</label>
+          <div class="file-input-wrap">
+            {{ form.image }}
+            {% if form.instance.image %}<img src="{{ form.instance.image.url }}" class="img-preview" alt="">{% endif %}
+          </div>
+          <div class="form-hint">Shown below the contact info on the left column.</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Google Maps Embed Code</label>
+          {{ form.map_embed }}
+          <div class="form-hint">Paste the full &lt;iframe&gt; embed code from Google Maps.</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">Save Contact Page</button>
+    </div>
+  </div>
+
+</form>
+
+<!-- Messages/Inquiries quick links -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
+  <a href="{% url 'dashboard:messages' %}" class="db-card" style="padding:16px 20px;display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <div>
+      <div style="font-weight:600;font-size:14px;">Contact Messages</div>
+      <div style="font-size:12px;color:var(--muted);">View messages from the contact form →</div>
+    </div>
+  </a>
+  <a href="{% url 'dashboard:inquiries' %}" class="db-card" style="padding:16px 20px;display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <div>
+      <div style="font-weight:600;font-size:14px;">Service Inquiries</div>
+      <div style="font-size:12px;color:var(--muted);">View research &amp; service enquiries →</div>
+    </div>
+  </a>
+</div>
+{% endblock %}

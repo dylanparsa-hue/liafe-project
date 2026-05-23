@@ -1,0 +1,59 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Value Pillars{% endblock %}
+{% block topbar_title %}Value Pillars — Why Choose Us{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:value_pillar_add' %}" class="tb-btn tb-btn-primary">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  Add Pillar
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:homepage_sections' %}">Homepage Sections</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Value Pillars</span>
+</div>
+
+<div class="db-card" style="margin-bottom:12px;padding:12px 18px;font-size:13px;color:var(--muted);border-left:3px solid var(--primary);">
+  These cards appear in the <strong>Why Choose Us</strong> section on the homepage. Each pillar should have a title, description, and icon name.
+</div>
+
+<div class="db-card">
+  {% if pillars %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead>
+        <tr><th>Order</th><th>Title</th><th>Description</th><th>Icon</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for pillar in pillars %}
+        <tr>
+          <td style="color:var(--muted);font-size:13px;">{{ pillar.order }}</td>
+          <td style="font-weight:500;">{{ pillar.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ pillar.description|truncatechars:70 }}</td>
+          <td style="font-family:monospace;font-size:12px;color:var(--muted);">{{ pillar.icon_class|default:"—" }}</td>
+          <td><span class="badge {% if pillar.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if pillar.is_active %}Active{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:value_pillar_edit' pillar.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:value_pillar_delete' pillar.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <div class="empty-title">No value pillars yet</div>
+    <div class="empty-text">Add pillars to populate the "Why Choose Us" section on the homepage.</div>
+    <a href="{% url 'dashboard:value_pillar_add' %}" class="tb-btn tb-btn-primary">Add First Pillar</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

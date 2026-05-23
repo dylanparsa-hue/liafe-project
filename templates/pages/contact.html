@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us — {{ site.company_name }}{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-page">
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}">Home</a>
+      <span style="opacity:.4;">/</span>
+      <span style="color:var(--gold-soft);">Contact</span>
+    </div>
+    <span class="eyebrow reveal-js" style="color:var(--gold-soft);">Contact Us</span>
+    <h1 class="reveal-js d1" style="margin-top:16px;">{{ page.hero_title|default:"Speak with our team." }}</h1>
+    {% if page.hero_subtitle %}
+    <p class="lede reveal-js d2">{{ page.hero_subtitle }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- CONTACT CONTENT -->
+<section class="section">
+  <div class="container">
+    <div class="grid grid-2" style="gap:64px;align-items:flex-start;">
+
+      <!-- Left: info -->
+      <div class="reveal-js">
+        <span class="eyebrow">Get in touch</span>
+        <h2 style="margin-top:16px;font-size:clamp(24px,2.8vw,38px);">We'd love to hear from you.</h2>
+        {% if page.description %}
+        <div style="margin-top:16px;font-size:16px;line-height:1.75;color:var(--text-2);">{{ page.description|safe }}</div>
+        {% endif %}
+
+        <div style="margin-top:36px;">
+          <div class="contact-info-item">
+            <div class="ci-icon">{% include 'partials/icons.html' with icon="Phone" size=18 %}</div>
+            <div>
+              <div class="ci-label">Phone</div>
+              <div class="ci-value"><a href="tel:{{ site.phone }}" style="text-decoration:none;color:inherit;">{{ site.phone }}</a></div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="ci-icon">{% include 'partials/icons.html' with icon="Mail" size=18 %}</div>
+            <div>
+              <div class="ci-label">Email</div>
+              <div class="ci-value"><a href="mailto:{{ site.email }}" style="text-decoration:none;color:inherit;">{{ site.email }}</a></div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="ci-icon">{% include 'partials/icons.html' with icon="Pin" size=18 %}</div>
+            <div>
+              <div class="ci-label">Location</div>
+              <div class="ci-value">{{ site.address }}</div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="ci-icon">{% include 'partials/icons.html' with icon="Clock" size=18 %}</div>
+            <div>
+              <div class="ci-label">Working Hours</div>
+              <div class="ci-value">{{ site.working_hours }}</div>
+            </div>
+          </div>
+        </div>
+
+        {% if page.image %}
+        <div style="margin-top:36px;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/3;">
+          <img src="{{ page.image.url }}" alt="LIAFE office" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Right: form -->
+      <div class="reveal-js d1">
+        {% if success %}
+        <div class="form-success" style="margin-bottom:28px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+          <div>
+            <strong>Message sent — thank you.</strong>
+            <p style="margin-top:4px;font-size:13px;">{{ page.success_message|default:"We'll be in touch shortly." }}</p>
+          </div>
+        </div>
+        {% endif %}
+
+        <div style="background:var(--gray-1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px;">
+          {% if page.contact_form_intro %}
+          <p style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;">{{ page.contact_form_intro }}</p>
+          {% endif %}
+          <form method="post" style="display:flex;flex-direction:column;gap:16px;">
+            {% csrf_token %}
+            <div class="field-row">
+              <div class="field">
+                <label for="id_name">Full Name *</label>
+                <input type="text" name="name" id="id_name" required placeholder="Your full name" value="{{ form.name.value|default:'' }}">
+                {% if form.name.errors %}<span style="color:#b42318;font-size:12px;">{{ form.name.errors.0 }}</span>{% endif %}
+              </div>
+              <div class="field">
+                <label for="id_email">Email *</label>
+                <input type="email" name="email" id="id_email" required placeholder="your@email.com" value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}<span style="color:#b42318;font-size:12px;">{{ form.email.errors.0 }}</span>{% endif %}
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="id_phone">Phone</label>
+                <input type="tel" name="phone" id="id_phone" placeholder="+44 ..." value="{{ form.phone.value|default:'' }}">
+              </div>
+              <div class="field">
+                <label for="id_subject">Subject</label>
+                <input type="text" name="subject" id="id_subject" placeholder="How can we help?" value="{{ form.subject.value|default:'' }}">
+              </div>
+            </div>
+            <div class="field">
+              <label for="id_message">Message *</label>
+              <textarea name="message" id="id_message" required placeholder="Your message..." rows="5">{{ form.message.value|default:'' }}</textarea>
+              {% if form.message.errors %}<span style="color:#b42318;font-size:12px;">{{ form.message.errors.0 }}</span>{% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="align-self:flex-start;">
+              Send Message
+              <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+{% if page.map_embed %}
+<section style="padding:0 0 80px;">
+  <div class="container">
+    <div style="border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);height:400px;">
+      {{ page.map_embed|safe }}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

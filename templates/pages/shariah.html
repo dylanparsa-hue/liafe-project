@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shariah Advisory — {{ site.company_name }}{% endblock %}
+{% block meta_description %}{{ service.seo_description|default:service.short_description }}{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero-page {% if service.hero_image %}has-photo{% endif %}">
+  {% if service.hero_image %}<div class="hero-photo-bg" style="background-image:url('{{ service.hero_image.url }}');"></div>{% endif %}
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="breadcrumb">
+      <a href="{% url 'home' %}">Home</a>
+      <span style="opacity:.4;">/</span>
+      <span>Services</span>
+      <span style="opacity:.4;">/</span>
+      <span style="color:var(--gold-soft);">Shariah Advisory</span>
+    </div>
+    <span class="eyebrow reveal-js" style="color:var(--gold-soft);">Shariah Advisory</span>
+    <h1 class="reveal-js d1" style="margin-top:16px;">{{ service.hero_title|default:"Ensuring Compliance, Building Trust" }}</h1>
+    <p class="lede reveal-js d2">{{ service.hero_description|default:"LIAFE provides expert Shariah advisory services to help businesses grow ethically, transparently, and in harmony with Shariah principles. We bridge faith and finance with clarity, structure, and integrity." }}</p>
+    <div style="margin-top:36px;" class="reveal-js d3">
+      <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">Request Advisory</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS STEPS -->
+{% if process_items %}
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;max-width:640px;margin:0 auto 56px;" class="reveal-js">
+      <span class="eyebrow center">Our Process</span>
+      <h2 style="margin-top:16px;">Eight steps to compliant, confident outcomes.</h2>
+    </div>
+    <div class="grid grid-2" style="gap:16px;">
+      {% for item in process_items %}
+      <div class="card-feature reveal-js d{{ forloop.counter|divisibleby:2|yesno:'2,1' }}">
+        <div class="num">{{ forloop.counter|stringformat:"02d" }}</div>
+        <div>
+          <h4 style="margin-bottom:8px;">{{ item.title }}</h4>
+          <p style="font-size:14px;line-height:1.6;">{{ item.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- SERVICE CARDS -->
+{% if card_items %}
+<section class="section beige">
+  <div class="container">
+    <div style="text-align:center;max-width:640px;margin:0 auto 56px;" class="reveal-js">
+      <span class="eyebrow center">What We Offer</span>
+      <h2 style="margin-top:16px;">Specialist advisory across all dimensions of Shariah compliance.</h2>
+    </div>
+    <div class="grid grid-4">
+      {% for item in card_items %}
+      <div class="card reveal-js d{{ forloop.counter }}">
+        <div class="card-icon">{% include 'partials/icons.html' with icon=item.icon_class size=22 %}</div>
+        <h4>{{ item.title }}</h4>
+        <p style="margin-top:8px;font-size:14px;line-height:1.6;">{{ item.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="section-tight">
+  <div class="container">
+    <div class="cta-band reveal-js">
+      <h2>{{ service.cta_title|default:"Ready to achieve full Shariah compliance?" }}</h2>
+      <div class="ctas">
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">{{ service.cta_button_text|default:"Contact Our Advisors" }}</a>
+        <a href="{% url 'home' %}" class="btn btn-outline-light">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,238 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{{ svc.title }}{% endblock %}
+{% block topbar_title %}{{ svc.title }}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:service_edit' svc.pk %}" class="tb-btn tb-btn-primary">Edit Service Info</a>
+<a href="{% url 'dashboard:services' %}" class="tb-btn tb-btn-outline">← All Services</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:services' %}">Services</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{{ svc.title }}</span>
+</div>
+
+<!-- Service summary card -->
+<div class="db-card" style="margin-bottom:24px;">
+  <div class="db-card-body" style="display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:18px;font-weight:700;">{{ svc.title }}</span>
+        <span class="badge {% if svc.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if svc.is_active %}Active{% else %}Hidden{% endif %}</span>
+      </div>
+      <div style="font-size:13.5px;color:var(--muted);margin-bottom:8px;">{{ svc.short_description }}</div>
+      <div style="display:flex;gap:12px;font-size:12px;color:var(--muted);">
+        <span>Slug: <code style="background:#F1F5F9;padding:1px 5px;border-radius:3px;">{{ svc.slug }}</code></span>
+        <span>Order: {{ svc.order }}</span>
+        {% if svc.hero_image %}<span class="badge badge-blue">Has hero image</span>{% endif %}
+      </div>
+    </div>
+    {% if svc.hero_image %}
+    <img src="{{ svc.hero_image.url }}" style="width:120px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--border);" alt="">
+    {% endif %}
+  </div>
+</div>
+
+{% if svc.slug == 'academy' %}
+<!-- Academy: manage via Academy section -->
+<div class="db-card" style="margin-bottom:24px;padding:16px 20px;border-left:3px solid var(--primary);">
+  <div style="font-size:13.5px;">
+    <strong>Academy content</strong> (course categories, courses, delivery modes) is managed in the
+    <a href="{% url 'dashboard:academy' %}">Academy section →</a>
+  </div>
+</div>
+{% endif %}
+
+{% if svc.slug == 'research-house' %}
+<div class="db-card" style="margin-bottom:24px;padding:16px 20px;border-left:3px solid var(--primary);">
+  <div style="font-size:13.5px;">
+    <strong>Research content</strong> (categories, projects) is managed in the
+    <a href="{% url 'dashboard:research' %}">Research section →</a>
+  </div>
+</div>
+{% endif %}
+
+{% if svc.slug == 'publication' %}
+<div class="db-card" style="margin-bottom:24px;padding:16px 20px;border-left:3px solid var(--primary);">
+  <div style="font-size:13.5px;">
+    <strong>Publication content</strong> is managed in the
+    <a href="{% url 'dashboard:publications' %}">Publications section →</a>
+  </div>
+</div>
+{% endif %}
+
+<!-- ── Process Steps ── -->
+{% with items=features_by_type.process %}
+<div class="db-card" style="margin-bottom:20px;">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Process Steps</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Shown as numbered steps on the service page</div>
+    </div>
+    <a href="{% url 'dashboard:feature_add' svc.pk %}?type=process" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Step
+    </a>
+  </div>
+  {% if items %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>#</th><th>Title</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td style="color:var(--muted);">{{ item.order }}</td>
+          <td style="font-weight:500;">{{ item.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ item.description|truncatechars:70 }}</td>
+          <td><span class="badge {% if item.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if item.is_active %}Active{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:feature_edit' svc.pk item.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:feature_delete' svc.pk item.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div style="padding:20px;text-align:center;color:var(--muted);font-size:13.5px;">No process steps yet. <a href="{% url 'dashboard:feature_add' svc.pk %}?type=process">Add one →</a></div>
+  {% endif %}
+</div>
+{% endwith %}
+
+<!-- ── Service Cards ── -->
+{% with items=features_by_type.card %}
+<div class="db-card" style="margin-bottom:20px;">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Service Cards</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Cards shown in the "What We Offer" grid</div>
+    </div>
+    <a href="{% url 'dashboard:feature_add' svc.pk %}?type=card" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Card
+    </a>
+  </div>
+  {% if items %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>#</th><th>Title</th><th>Description</th><th>Icon</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td style="color:var(--muted);">{{ item.order }}</td>
+          <td style="font-weight:500;">{{ item.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ item.description|truncatechars:60 }}</td>
+          <td style="font-family:monospace;font-size:12px;color:var(--muted);">{{ item.icon_class|default:"—" }}</td>
+          <td><span class="badge {% if item.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if item.is_active %}Active{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:feature_edit' svc.pk item.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:feature_delete' svc.pk item.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div style="padding:20px;text-align:center;color:var(--muted);font-size:13.5px;">No service cards yet. <a href="{% url 'dashboard:feature_add' svc.pk %}?type=card">Add one →</a></div>
+  {% endif %}
+</div>
+{% endwith %}
+
+<!-- ── Delivery Modes (Academy) ── -->
+{% with items=features_by_type.delivery %}
+{% if items or svc.slug == 'academy' %}
+<div class="db-card" style="margin-bottom:20px;">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Delivery Modes</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">How the academy delivers training (Online, In-person, Webinar, Workshop)</div>
+    </div>
+    <a href="{% url 'dashboard:feature_add' svc.pk %}?type=delivery" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Mode
+    </a>
+  </div>
+  {% if items %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>#</th><th>Label</th><th>Description</th><th>Icon</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td style="color:var(--muted);">{{ item.order }}</td>
+          <td style="font-weight:500;">{{ item.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ item.description|truncatechars:60 }}</td>
+          <td style="font-family:monospace;font-size:12px;color:var(--muted);">{{ item.icon_class|default:"—" }}</td>
+          <td><span class="badge {% if item.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if item.is_active %}Active{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:feature_edit' svc.pk item.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:feature_delete' svc.pk item.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div style="padding:20px;text-align:center;color:var(--muted);font-size:13.5px;">No delivery modes yet. <a href="{% url 'dashboard:feature_add' svc.pk %}?type=delivery">Add one →</a></div>
+  {% endif %}
+</div>
+{% endif %}
+{% endwith %}
+
+<!-- ── Research Values ── -->
+{% with items=features_by_type.value %}
+{% if items or svc.slug == 'research-house' %}
+<div class="db-card" style="margin-bottom:20px;">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Research Values</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Core value cards shown at the top of the Research House page</div>
+    </div>
+    <a href="{% url 'dashboard:feature_add' svc.pk %}?type=value" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Value
+    </a>
+  </div>
+  {% if items %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>#</th><th>Title</th><th>Description</th><th>Icon</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td style="color:var(--muted);">{{ item.order }}</td>
+          <td style="font-weight:500;">{{ item.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ item.description|truncatechars:60 }}</td>
+          <td style="font-family:monospace;font-size:12px;color:var(--muted);">{{ item.icon_class|default:"—" }}</td>
+          <td><span class="badge {% if item.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if item.is_active %}Active{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:feature_edit' svc.pk item.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:feature_delete' svc.pk item.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div style="padding:20px;text-align:center;color:var(--muted);font-size:13.5px;">No research values yet. <a href="{% url 'dashboard:feature_add' svc.pk %}?type=value">Add one →</a></div>
+  {% endif %}
+</div>
+{% endif %}
+{% endwith %}
+
+{% endblock %}

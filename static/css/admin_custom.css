@@ -1,0 +1,654 @@
+/* ================================================================
+   LIAFE Admin — Custom overlay on django-unfold
+   Handles: dashboard components, gold accents, font, minor overrides
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Font override ──────────────────────────────────────────── */
+body,
+input, select, textarea, button {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* ── SIDEBAR: dark navy background ─────────────────────────── */
+/* IDs confirmed from Unfold's nav_sidebar.html template */
+#nav-sidebar,
+#nav-sidebar-inner {
+  background-color: #0B1F3A !important;
+  border-right-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Brand / header area inside sidebar */
+#nav-sidebar .border-b,
+#nav-sidebar-inner .border-b {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Site name text in sidebar header */
+#nav-sidebar .font-semibold,
+#nav-sidebar-inner .font-semibold {
+  color: #ffffff !important;
+}
+
+/* Separator lines between groups */
+#nav-sidebar-apps hr {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ── Section group titles (h2) ──────────────────────────────── */
+#nav-sidebar-apps h2 {
+  color: #C9A227 !important;
+  opacity: 1 !important;
+}
+#nav-sidebar-apps h2 span.material-symbols-outlined {
+  color: rgba(201, 162, 39, 0.75) !important;
+}
+
+/* ── Navigation links — inactive ────────────────────────────── */
+#nav-sidebar-apps ol li a {
+  color: rgba(255, 255, 255, 0.80) !important;
+  opacity: 1 !important;
+}
+#nav-sidebar-apps ol li a span {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+/* ── Navigation links — hover ───────────────────────────────── */
+#nav-sidebar-apps ol li a:hover {
+  background-color: rgba(255, 255, 255, 0.07) !important;
+  color: #ffffff !important;
+}
+
+/* ── Navigation links — ACTIVE ──────────────────────────────── */
+#nav-sidebar-apps ol li a.active {
+  background-color: rgba(201, 162, 39, 0.18) !important;
+  color: #C9A227 !important;
+  font-weight: 600 !important;
+}
+#nav-sidebar-apps ol li a.active .material-symbols-outlined {
+  color: #C9A227 !important;
+}
+
+/* ── Icons on nav links ──────────────────────────────────────── */
+#nav-sidebar-apps ol li a .material-symbols-outlined {
+  color: rgba(255, 255, 255, 0.50) !important;
+  transition: color 0.15s;
+}
+#nav-sidebar-apps ol li a:hover .material-symbols-outlined {
+  color: #C9A227 !important;
+}
+
+/* ── User panel at bottom of sidebar ────────────────────────── */
+#nav-sidebar [id*="user"],
+#nav-sidebar [class*="navigation_user"] {
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* ── Gold focus ring on inputs ──────────────────────────────── */
+input:focus, select:focus, textarea:focus {
+  --tw-ring-color: rgba(201, 162, 39, 0.35) !important;
+  border-color: #C9A227 !important;
+  outline: none;
+}
+
+/* ── Favicon colour tweak on the gold icon ──────────────────── */
+.text-primary-600 { color: #C9A227 !important; }
+
+/* ── Image previews ─────────────────────────────────────────── */
+.field-logo_preview img,
+.field-favicon_preview img,
+.field-cover_thumb img,
+.field-image_thumb img {
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  max-height: 80px;
+  width: auto;
+  object-fit: cover;
+}
+
+/* ================================================================
+   DASHBOARD  (ld-* = liafe dashboard)
+   ================================================================ */
+
+.ld-dash {
+  padding: 0 0 3rem;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Alert banner ───────────────────────────────────────────── */
+.ld-alert {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  background: #0B1F3A;
+  color: #fff;
+  border-radius: 10px;
+  padding: .9rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: .875rem;
+}
+.ld-alert-icon {
+  width: 20px; height: 20px;
+  color: #C9A227;
+  flex-shrink: 0;
+}
+.ld-alert strong { color: #C9A227; }
+.ld-alert-link {
+  color: #C9A227;
+  font-weight: 600;
+  font-size: .8rem;
+  text-decoration: none;
+  margin-left: auto;
+  white-space: nowrap;
+  opacity: .9;
+}
+.ld-alert-link:hover { opacity: 1; }
+
+/* ── Stat tiles ─────────────────────────────────────────────── */
+.ld-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.ld-stat {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.2rem 1.35rem;
+  text-decoration: none;
+  color: inherit;
+  border-left: 3px solid #C9A227;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  transition: box-shadow .18s, transform .18s;
+}
+.ld-stat:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,.09);
+  transform: translateY(-2px);
+  color: inherit;
+}
+.ld-stat-alert { border-left-color: #dc2626; }
+.ld-stat-warn  { border-left-color: #f59e0b; }
+
+.ld-stat-icon {
+  width: 46px; height: 46px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ld-stat-icon svg { width: 22px; height: 22px; }
+.ld-icon-navy  { background: rgba(11,31,58,.07);   color: #0B1F3A; }
+.ld-icon-gold  { background: rgba(201,162,39,.12); color: #a8840f; }
+.ld-icon-red   { background: rgba(220,38,38,.08);  color: #dc2626; }
+.ld-icon-amber { background: rgba(245,158,11,.08); color: #d97706; }
+
+.ld-stat-num {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #111827;
+}
+.ld-stat-label {
+  font-size: .74rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-top: .25rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+.ld-badge {
+  font-size: .67rem;
+  font-weight: 700;
+  padding: .15rem .5rem;
+  border-radius: 20px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.ld-badge-red   { background: #dc2626; color: #fff; }
+.ld-badge-amber { background: #f59e0b; color: #fff; }
+
+/* ── Section card ───────────────────────────────────────────── */
+.ld-section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.ld-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .85rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+.ld-section-title {
+  font-size: .82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #374151;
+}
+.ld-section-link {
+  font-size: .78rem;
+  font-weight: 600;
+  color: #C9A227;
+  text-decoration: none;
+  opacity: .9;
+  transition: opacity .12s;
+}
+.ld-section-link:hover { opacity: 1; }
+
+/* ── Quick actions ──────────────────────────────────────────── */
+.ld-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+  gap: .75rem;
+  padding: 1.25rem 1.5rem;
+}
+.ld-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem .75rem;
+  text-decoration: none;
+  color: #1f2937;
+  font-size: .75rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+  transition: border-color .15s, background .15s, transform .15s, box-shadow .15s;
+}
+.ld-action:hover {
+  border-color: #C9A227;
+  background: #fffbf0;
+  color: #0B1F3A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(201,162,39,.18);
+}
+.ld-action-icon {
+  width: 38px; height: 38px;
+  background: rgba(11,31,58,.06);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.ld-action-icon svg {
+  width: 18px; height: 18px;
+  color: #C9A227;
+  stroke: currentColor;
+}
+.ld-action:hover .ld-action-icon { background: rgba(201,162,39,.12); }
+
+/* ── Two-col layout ─────────────────────────────────────────── */
+.ld-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 860px) { .ld-grid-2 { grid-template-columns: 1fr; } }
+
+/* ── Feed rows (messages / publications) ────────────────────── */
+.ld-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  padding: .85rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background .1s;
+}
+.ld-row:last-child { border-bottom: none; }
+.ld-row:hover { background: #fafafa; }
+
+.ld-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0B1F3A, #1e3a6e);
+  color: #C9A227;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .85rem;
+  flex-shrink: 0;
+}
+.ld-pub-cover {
+  width: 36px; height: 48px;
+  border-radius: 4px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.ld-pub-cover img { width: 100%; height: 100%; object-fit: cover; }
+.ld-pub-cover svg { width: 18px; height: 18px; color: #9ca3af; }
+
+.ld-row-body { flex: 1; min-width: 0; }
+.ld-row-name {
+  font-weight: 600;
+  font-size: .86rem;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ld-unread-dot {
+  width: 7px; height: 7px;
+  background: #dc2626;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ld-row-sub {
+  font-size: .79rem;
+  color: #6b7280;
+  margin-top: .1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ld-row-date { font-size: .73rem; color: #9ca3af; margin-top: .1rem; }
+.ld-row-action {
+  color: #C9A227;
+  font-size: .78rem;
+  font-weight: 600;
+  text-decoration: none;
+  flex-shrink: 0;
+  padding-top: .1rem;
+  transition: color .12s;
+}
+.ld-row-action:hover { color: #a8840f; }
+
+.ld-type-badge {
+  font-size: .67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: .18rem .55rem;
+  border-radius: 20px;
+  background: rgba(201,162,39,.12);
+  color: #a8840f;
+}
+
+.ld-empty {
+  padding: 2.25rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: .84rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+}
+.ld-empty svg { width: 28px; height: 28px; opacity: .3; }
+
+/* ── All Sections model grid ────────────────────────────────── */
+.ld-app-group { margin-bottom: 1.5rem; }
+.ld-app-group:last-child { margin-bottom: 0; }
+.ld-app-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #9ca3af;
+  margin-bottom: .6rem;
+  padding-bottom: .4rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+.ld-model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: .5rem;
+}
+.ld-model-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: .5rem .85rem;
+  font-size: .82rem;
+  transition: border-color .12s, background .12s;
+}
+.ld-model-tile:hover { border-color: #d1d5db; background: #f3f4f6; }
+.ld-model-name { color: #1f2937; font-weight: 600; text-decoration: none; }
+.ld-model-name:hover { color: #0B1F3A; }
+.ld-model-add {
+  color: #C9A227;
+  font-weight: 700;
+  font-size: .9rem;
+  text-decoration: none;
+  opacity: .75;
+  line-height: 1;
+  padding-left: .35rem;
+  transition: opacity .12s;
+}
+.ld-model-add:hover { opacity: 1; }
+
+/* ================================================================
+   GLOBAL CONTRAST FIX — Unfold light-mode readability
+   Only fixes opacity/color of text. No layout changes.
+   ================================================================ */
+
+/* ── Kill inherited opacity on all normal text ──────────────────── */
+#main, #content, #content-main,
+#changelist, .change-list,
+.module, .form-row,
+.breadcrumbs, .object-tools,
+.submit-row, #toolbar, #nav-global {
+  opacity: 1 !important;
+  color: #1F2937 !important;
+}
+
+/* ── Main content headings ──────────────────────────────────────── */
+#content h1, #content h2, #content h3,
+#content-main h1, #content-main h2, #content-main h3,
+.content-title, #content #content-main h1 {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Breadcrumbs ────────────────────────────────────────────────── */
+.breadcrumbs,
+.breadcrumbs a,
+.breadcrumbs span,
+[class*="breadcrumb"] {
+  color: #6B7280 !important;
+  opacity: 1 !important;
+}
+.breadcrumbs a:hover { color: #1F2937 !important; }
+
+/* ── Changelist table — headers ─────────────────────────────────── */
+#result_list thead th,
+#result_list thead th a,
+#result_list thead th span,
+table.module thead th,
+table.module thead th a {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Changelist table — body rows ───────────────────────────────── */
+#result_list tbody td,
+#result_list tbody th,
+#result_list tbody td a,
+#result_list tbody th a,
+.results td, .results th,
+.results td a, .results th a,
+table.module tbody td,
+table.module tbody th {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Table borders ──────────────────────────────────────────────── */
+#result_list,
+#result_list th,
+#result_list td,
+.results th,
+.results td,
+table.module {
+  border-color: #E5E7EB !important;
+}
+
+/* ── Alternating row background doesn't dim text ───────────────── */
+#result_list tbody tr.row1 td,
+#result_list tbody tr.row2 td,
+#result_list tbody tr:hover td {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Search bar & filter toolbar ────────────────────────────────── */
+#toolbar label,
+#toolbar input[type="text"],
+#toolbar input[type="search"],
+#searchbar,
+#changelist-search input,
+#changelist-search label,
+#changelist-filter h2,
+#changelist-filter h3,
+#changelist-filter li,
+#changelist-filter li a,
+#changelist-filter li a:hover {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+#changelist-filter li.selected a {
+  color: #C9A227 !important;
+}
+
+/* ── Action bar (select / go) ───────────────────────────────────── */
+.actions label,
+.actions select,
+.actions .button,
+#changelist .actions label,
+#changelist .actions select {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Form labels & help text ────────────────────────────────────── */
+.form-row label,
+fieldset label,
+.field-box label,
+.form-row .help,
+fieldset .help,
+.help-text,
+.helptext,
+p.help {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+.form-row .help,
+.helptext,
+p.help {
+  color: #6B7280 !important;
+}
+
+/* ── Fieldset headers ───────────────────────────────────────────── */
+fieldset h2,
+fieldset legend,
+.fieldset-title,
+.collapse-toggle {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Form inputs — text must be readable ────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="datetime-local"],
+select, textarea {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Object history / action list ──────────────────────────────── */
+#change-history tbody td,
+#change-history thead th,
+.object-history td,
+.object-history th {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Inline table rows ──────────────────────────────────────────── */
+.inline-related h3,
+.inline-related h3 span,
+.tabular .original p,
+.tabular td,
+.tabular th,
+.stacked .form-row label {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── Delete links & misc muted text ─────────────────────────────── */
+.deletelink,
+.inline-deletelink {
+  opacity: 1 !important;
+}
+.quiet, .mini-text, small {
+  color: #6B7280 !important;
+  opacity: 1 !important;
+}
+
+/* ── Save / submit buttons ──────────────────────────────────────── */
+.submit-row input[type="submit"],
+.submit-row input[type="button"],
+.submit-row a.deletelink,
+input[name="_save"],
+input[name="_addanother"],
+input[name="_continue"] {
+  opacity: 1 !important;
+}
+
+/* ── Any Tailwind opacity utilities Unfold applies to text ──────── */
+#main [class*="text-opacity"],
+#main [class*="opacity-"] {
+  --tw-text-opacity: 1 !important;
+}
+
+/* ── Generic Tailwind text-color classes that render faded ──────── */
+#content .text-gray-400,
+#content .text-gray-500,
+#content .dark\:text-gray-400,
+#main .text-font-subtle-light {
+  color: #6B7280 !important;
+  opacity: 1 !important;
+}
+#content .text-gray-700,
+#content .text-gray-800,
+#content .text-gray-900,
+#content .text-font-default-light,
+#content .text-font-important-light,
+#main .font-medium,
+#main .font-semibold,
+#main .font-bold {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}

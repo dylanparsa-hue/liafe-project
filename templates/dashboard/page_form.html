@@ -1,0 +1,117 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Page — {{ obj.title }}{% else %}Add Page{% endif %}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Page{% else %}Add New Page{% endif %}{% endblock %}
+{% block topbar_actions %}
+{% if obj %}<a href="{% url 'dashboard:page_detail' obj.pk %}" class="tb-btn tb-btn-outline">← Back to {{ obj.title }}</a>
+{% else %}<a href="{% url 'dashboard:pages_list' %}" class="tb-btn tb-btn-outline">← All Pages</a>{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:pages_list' %}">Pages</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit{% else %}Add{% endif %}</span>
+</div>
+
+{% if form.errors %}
+<div class="db-card" style="margin-bottom:16px;padding:12px 18px;border-left:3px solid var(--danger);background:#FEF2F2;">
+  <div style="font-weight:600;color:var(--danger);margin-bottom:6px;">Please fix the errors below:</div>
+  {% for field in form %}{% if field.errors %}<div style="font-size:13px;color:var(--danger);">{{ field.label }}: {{ field.errors|join:", " }}</div>{% endif %}{% endfor %}
+</div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Page Details</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field form-full">
+          <label class="form-label">Page Title <span class="required">*</span></label>
+          {{ form.title }}{% if form.title.errors %}<div class="form-error">{{ form.title.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Slug (URL) <span class="required">*</span></label>
+          {{ form.slug }}{% if form.slug.errors %}<div class="form-error">{{ form.slug.errors|join:", " }}</div>{% endif %}
+          <div class="form-hint">Will be: /pages/<strong id="slug-preview">{{ obj.slug|default:"your-slug" }}</strong>/</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Subtitle</label>{{ form.subtitle }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Description</label>{{ form.description }}
+          <div class="form-hint">Short description shown below the title on the page.</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Featured Image</label>
+          <div class="file-input-wrap">
+            {{ form.featured_image }}
+            {% if obj and obj.featured_image %}<img src="{{ obj.featured_image.url }}" class="img-preview" alt="">{% endif %}
+          </div>
+          <div class="form-hint">{{ form.featured_image.help_text }}</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Status</label>
+          <div class="check-row" style="margin-top:8px;">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">Active (page is live)</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Navigation Menu</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <div class="check-row">{{ form.show_in_menu }}<label for="{{ form.show_in_menu.id_for_label }}">Show this page in the top nav bar</label></div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Menu Label</label>{{ form.menu_label }}
+          <div class="form-hint">Short label shown in the nav (defaults to page title if blank).</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Menu Order</label>{{ form.menu_order }}
+          <div class="form-hint">Lower numbers appear first. Default is 99.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">SEO</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">SEO Title</label>{{ form.seo_title }}
+          <div class="form-hint">Shown in browser tab and search results.</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">SEO Description</label>{{ form.seo_description }}
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Create Page{% endif %}</button>
+      <a href="{% url 'dashboard:pages_list' %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}<a href="{% url 'dashboard:page_delete' obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete Page</a>{% endif %}
+    </div>
+  </div>
+</form>
+
+<script>
+document.getElementById('id_title')?.addEventListener('input', function() {
+  const slug = this.value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const preview = document.getElementById('slug-preview');
+  if (preview && !document.getElementById('id_slug').value) {
+    preview.textContent = slug || 'your-slug';
+  }
+});
+document.getElementById('id_slug')?.addEventListener('input', function() {
+  const preview = document.getElementById('slug-preview');
+  if (preview) preview.textContent = this.value || 'your-slug';
+});
+</script>
+{% endblock %}

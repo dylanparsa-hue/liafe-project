@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Database (never commit the local DB)
+db.sqlite3
+*.sqlite3
+
+# Media uploads (served from Cloudinary in production)
+media/
+
+# Collected static files (regenerated on deploy)
+staticfiles/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log

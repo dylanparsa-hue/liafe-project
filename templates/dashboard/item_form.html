@@ -1,0 +1,100 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Item{% else %}Add Item{% endif %}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Item{% else %}Add Item{% endif %}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:page_detail' section.page_id %}" class="tb-btn tb-btn-outline">← {{ section.page.title }}</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:pages_list' %}">Pages</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:page_detail' section.page_id %}">{{ section.page.title }}</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit{% else %}Add{% endif %} {{ section.get_section_type_display }} Item</span>
+</div>
+
+{% if form.errors %}
+<div class="db-card" style="margin-bottom:16px;padding:12px 18px;border-left:3px solid var(--danger);background:#FEF2F2;">
+  <div style="font-weight:600;color:var(--danger);margin-bottom:6px;">Please fix the errors below:</div>
+  {% for field in form %}{% if field.errors %}<div style="font-size:13px;color:var(--danger);">{{ field.label }}: {{ field.errors|join:", " }}</div>{% endif %}{% endfor %}
+</div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="db-card" style="max-width:760px;margin-bottom:20px;">
+    <div class="db-card-header">
+      <div class="db-card-title">
+        {% if section.section_type == 'faq' %}FAQ Item
+        {% elif section.section_type == 'gallery' %}Gallery Image
+        {% else %}Card / Item
+        {% endif %}
+      </div>
+    </div>
+    <div class="db-card-body">
+      <div class="form-grid">
+
+        {% if section.section_type == 'faq' %}
+        <div class="form-field form-full">
+          <label class="form-label">Question</label>{{ form.title }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Answer</label>{{ form.description }}
+        </div>
+        {% else %}
+        <div class="form-field form-full">
+          <label class="form-label">Title</label>{{ form.title }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Subtitle</label>{{ form.subtitle }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Description</label>{{ form.description }}
+        </div>
+        {% if section.section_type != 'gallery' %}
+        <div class="form-field">
+          <label class="form-label">Icon</label>{{ form.icon_class }}
+          <div class="form-hint">e.g. Star, Globe, Shield, Check</div>
+        </div>
+        {% endif %}
+        <div class="form-field">
+          <label class="form-label">Image</label>
+          <div class="file-input-wrap">
+            {{ form.image }}
+            {% if obj and obj.image %}<img src="{{ obj.image.url }}" class="img-preview" alt="">{% endif %}
+          </div>
+          <div class="form-hint">{{ form.image.help_text }}</div>
+        </div>
+        {% if section.section_type == 'gallery' %}
+        <div class="form-field">
+          <label class="form-label">Caption</label>{{ form.caption }}
+          <div class="form-hint">{{ form.caption.help_text }}</div>
+        </div>
+        {% endif %}
+        {% if section.section_type != 'gallery' %}
+        <div class="form-field">
+          <label class="form-label">Button Text</label>{{ form.button_text }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Button Link</label>{{ form.button_link }}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="form-field">
+          <label class="form-label">Order</label>{{ form.order }}
+        </div>
+        <div class="form-field">
+          <div class="check-row">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">Active</label></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Add Item{% endif %}</button>
+      <a href="{% url 'dashboard:page_detail' section.page_id %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}<a href="{% url 'dashboard:item_delete' obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete</a>{% endif %}
+    </div>
+  </div>
+</form>
+{% endblock %}

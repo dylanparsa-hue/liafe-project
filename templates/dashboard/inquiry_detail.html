@@ -1,0 +1,91 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Inquiry from {{ obj.name }}{% endblock %}
+{% block topbar_title %}Inquiry from {{ obj.name }}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:inquiries' %}" class="tb-btn tb-btn-outline">← Back</a>
+<a href="{% url 'dashboard:inquiry_delete' obj.pk %}" class="tb-btn tb-btn-danger">Delete</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:inquiries' %}">Inquiries</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{{ obj.name }}</span>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;">
+
+  <!-- Main detail -->
+  <div class="db-card">
+    <div class="db-card-header">
+      <div>
+        <div class="db-card-title">{{ obj.subject|default:"Inquiry" }}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Received {{ obj.created_at|date:"F j, Y" }} at {{ obj.created_at|time:"H:i" }}</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="badge badge-blue">{{ obj.get_inquiry_type_display }}</span>
+        <span class="badge {% if obj.is_read %}badge-gray{% else %}badge-red{% endif %}">
+          {% if obj.is_read %}Read{% else %}Unread{% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="db-card-body">
+      <div class="detail-grid" style="margin-bottom:20px;">
+        <div class="detail-field">
+          <div class="detail-label">Name</div>
+          <div class="detail-value">{{ obj.name }}</div>
+        </div>
+        <div class="detail-field">
+          <div class="detail-label">Email</div>
+          <div class="detail-value"><a href="mailto:{{ obj.email }}">{{ obj.email }}</a></div>
+        </div>
+        {% if obj.phone %}
+        <div class="detail-field">
+          <div class="detail-label">Phone</div>
+          <div class="detail-value">{{ obj.phone }}</div>
+        </div>
+        {% endif %}
+        {% if obj.company %}
+        <div class="detail-field">
+          <div class="detail-label">Company / Organisation</div>
+          <div class="detail-value">{{ obj.company }}</div>
+        </div>
+        {% endif %}
+        {% if obj.related_service %}
+        <div class="detail-field">
+          <div class="detail-label">Related Service</div>
+          <div class="detail-value">{{ obj.related_service }}</div>
+        </div>
+        {% endif %}
+      </div>
+      <div>
+        <div class="detail-label" style="margin-bottom:6px;">Message</div>
+        <div class="detail-message">{{ obj.message }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin notes -->
+  <div class="db-card">
+    <div class="db-card-header"><div class="db-card-title">Admin Notes</div></div>
+    <form method="post">
+      {% csrf_token %}
+      <div class="db-card-body">
+        <div class="form-field" style="margin-bottom:12px;">
+          {{ form.admin_notes }}
+        </div>
+        <div class="check-row">
+          {{ form.is_read }}
+          <label for="{{ form.is_read.id_for_label }}">Mark as read</label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="tb-btn tb-btn-primary">Save Notes</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

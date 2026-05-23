@@ -1,0 +1,102 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Edit Section — {{ obj.get_section_name_display }}{% endblock %}
+{% block topbar_title %}Edit: {{ obj.get_section_name_display }}{% endblock %}
+{% block topbar_actions %}
+<a href="{% url 'dashboard:homepage_sections' %}" class="tb-btn tb-btn-outline">← Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:homepage_sections' %}">Homepage Sections</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{{ obj.get_section_name_display }}</span>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if form.errors %}
+  <div class="db-card" style="margin-bottom:16px;padding:12px 18px;border-left:3px solid var(--danger);background:#FEF2F2;">
+    <div style="font-weight:600;color:var(--danger);margin-bottom:6px;">Please fix the errors below:</div>
+    {% for field in form %}{% if field.errors %}<div style="font-size:13px;color:var(--danger);">{{ field.label }}: {{ field.errors|join:", " }}</div>{% endif %}{% endfor %}
+    {% if form.non_field_errors %}<div style="font-size:13px;color:var(--danger);">{{ form.non_field_errors|join:", " }}</div>{% endif %}
+  </div>
+  {% endif %}
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Text Content</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field form-full">
+          <label class="form-label">Title</label>{{ form.title }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Subtitle</label>{{ form.subtitle }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Description</label>{{ form.description }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Button Text</label>{{ form.button_text }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Button Link</label>{{ form.button_link }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Images</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Section Image</label>
+          <div class="file-input-wrap">
+            {{ form.image }}
+            {% if obj.image %}
+            <img src="{{ obj.image.url }}" class="img-preview" alt="Section image">
+            <div class="img-preview-label">Current image</div>
+            {% endif %}
+          </div>
+          <div class="form-hint">{{ form.image.help_text }}</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Background Image</label>
+          <div class="file-input-wrap">
+            {{ form.background_image }}
+            {% if obj.background_image %}
+            <img src="{{ obj.background_image.url }}" class="img-preview" alt="Background image">
+            <div class="img-preview-label">Current background</div>
+            {% endif %}
+          </div>
+          <div class="form-hint">{{ form.background_image.help_text }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Display Options</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Order</label>{{ form.order }}
+        </div>
+        <div class="form-field" style="justify-content:flex-end;">
+          <div class="check-row">
+            {{ form.is_active }}
+            <label for="{{ form.is_active.id_for_label }}">Active (visible on site)</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">Save Section</button>
+      <a href="{% url 'dashboard:homepage_sections' %}" class="tb-btn tb-btn-outline">Cancel</a>
+    </div>
+  </div>
+
+</form>
+{% endblock %}

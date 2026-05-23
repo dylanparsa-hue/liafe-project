@@ -1,0 +1,114 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Academy{% endblock %}
+{% block topbar_title %}Academy — Course Management{% endblock %}
+{% block topbar_actions %}
+{% if academy_svc %}<a href="{% url 'dashboard:service_detail' academy_svc.pk %}" class="tb-btn tb-btn-outline">Service Page Settings</a>{% endif %}
+<a href="{% url 'dashboard:course_add' %}" class="tb-btn tb-btn-primary">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  Add Course
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Academy</span>
+</div>
+
+<!-- Course Categories -->
+<div class="db-card" style="margin-bottom:24px;">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Course Categories</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Displayed as the main programme grid on the Academy page</div>
+    </div>
+    <a href="{% url 'dashboard:course_category_add' %}" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Category
+    </a>
+  </div>
+  {% if categories %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>Title</th><th>Delivery</th><th>Duration</th><th>Level</th><th>Courses</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr>
+          <td>
+            <div style="font-weight:500;">{{ cat.title }}</div>
+            <div style="font-size:12px;color:var(--muted);">{{ cat.description|truncatechars:50 }}</div>
+          </td>
+          <td style="color:var(--muted);font-size:13px;">{{ cat.delivery_method|default:"—" }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ cat.duration|default:"—" }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ cat.level|default:"—" }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ cat.courses.count }}</td>
+          <td><span class="badge {% if cat.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if cat.is_active %}Active{% else %}Hidden{% endif %}</span></td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:course_category_edit' cat.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:course_category_delete' cat.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding:32px;">
+    <div class="empty-title">No course categories yet</div>
+    <div class="empty-text">Add categories like Shariah Finance, FinTech, and ESG to build the course catalogue.</div>
+    <a href="{% url 'dashboard:course_category_add' %}" class="tb-btn tb-btn-primary">Add Category</a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Individual Courses -->
+<div class="db-card">
+  <div class="db-card-header">
+    <div>
+      <div class="db-card-title">Individual Courses</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Courses nested under categories</div>
+    </div>
+    <a href="{% url 'dashboard:course_add' %}" class="tb-btn tb-btn-primary" style="font-size:12px;padding:6px 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Course
+    </a>
+  </div>
+  {% if courses %}
+  <div class="db-table-wrap">
+    <table class="db-table">
+      <thead><tr><th>Title</th><th>Category</th><th>Level</th><th>Duration</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for course in courses %}
+        <tr>
+          <td style="font-weight:500;">{{ course.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ course.category.title }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ course.level|default:"—" }}</td>
+          <td style="color:var(--muted);font-size:13px;">{{ course.duration|default:"—" }}</td>
+          <td style="color:var(--muted);font-size:13px;">{% if course.price %}£{{ course.price }}{% else %}—{% endif %}</td>
+          <td>
+            <span class="badge {% if course.is_active %}badge-green{% else %}badge-gray{% endif %}">{% if course.is_active %}Active{% else %}Hidden{% endif %}</span>
+            {% if course.is_featured %}<span class="badge badge-orange" style="margin-left:4px;">Featured</span>{% endif %}
+          </td>
+          <td>
+            <div class="tbl-actions">
+              <a href="{% url 'dashboard:course_edit' course.pk %}" class="tbl-btn tbl-btn-primary">Edit</a>
+              <a href="{% url 'dashboard:course_delete' course.pk %}" class="tbl-btn tbl-btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding:32px;">
+    <div class="empty-title">No courses yet</div>
+    <div class="empty-text">Add individual courses under a category to build the full catalogue.</div>
+    <a href="{% url 'dashboard:course_add' %}" class="tb-btn tb-btn-primary">Add Course</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

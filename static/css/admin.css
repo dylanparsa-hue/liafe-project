@@ -1,0 +1,363 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════
+   LIAFE CMS — Admin Stylesheet
+   Target: Django Unfold theme
+   Colors: Navy #0B1F3A  Gold #C9A227  Text #1F2937  Muted #6B7280
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Base font ───────────────────────────────────────────────── */
+*, body, input, select, textarea, button {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* ── SIDEBAR BACKGROUND ─────────────────────────────────────── */
+#nav-sidebar,
+aside[id*="nav"],
+[class*="sidebar"],
+nav.sidebar,
+#django-admin-sidebar { background-color: #0B1F3A !important; }
+
+#nav-sidebar *,
+aside[id*="nav"] * { border-color: rgba(255,255,255,0.08) !important; }
+
+/* ── SIDEBAR: section group headings ─────────────────────────── */
+#nav-sidebar h2,
+#nav-sidebar [class*="group"] > span,
+#nav-sidebar [class*="section"] > span,
+#nav-sidebar-apps h2,
+nav h2 { color: #C9A227 !important; opacity: 1 !important; font-size: 10px !important; letter-spacing: .1em !important; }
+
+/* ── SIDEBAR: nav links (inactive) ──────────────────────────── */
+#nav-sidebar a,
+#nav-sidebar li a,
+#nav-sidebar-apps ol li a,
+#nav-sidebar nav a {
+  color: rgba(255, 255, 255, 0.88) !important;
+  opacity: 1 !important;
+}
+#nav-sidebar a span,
+#nav-sidebar li a span,
+#nav-sidebar-apps ol li a span {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+/* ── SIDEBAR: nav link hover ────────────────────────────────── */
+#nav-sidebar a:hover,
+#nav-sidebar li a:hover,
+#nav-sidebar-apps ol li a:hover {
+  background-color: rgba(255,255,255,0.07) !important;
+  color: #ffffff !important;
+}
+
+/* ── SIDEBAR: active nav link ────────────────────────────────── */
+#nav-sidebar a.active,
+#nav-sidebar li a.active,
+#nav-sidebar-apps ol li a.active,
+#nav-sidebar a[aria-current],
+#nav-sidebar a[data-active] {
+  background-color: #C9A227 !important;
+  color: #0B1F3A !important;
+  font-weight: 600 !important;
+}
+#nav-sidebar a.active *,
+#nav-sidebar li a.active * {
+  color: #0B1F3A !important;
+}
+
+/* ── SIDEBAR: icon colors ────────────────────────────────────── */
+#nav-sidebar .material-symbols-outlined,
+#nav-sidebar [class*="icon"],
+#nav-sidebar-apps .material-symbols-outlined {
+  color: rgba(255,255,255,0.55) !important;
+}
+#nav-sidebar a:hover .material-symbols-outlined,
+#nav-sidebar a:hover [class*="icon"],
+#nav-sidebar-apps ol li a:hover .material-symbols-outlined {
+  color: #C9A227 !important;
+}
+#nav-sidebar a.active .material-symbols-outlined,
+#nav-sidebar a.active [class*="icon"] {
+  color: #0B1F3A !important;
+}
+
+/* ── SIDEBAR: user panel / bottom ───────────────────────────── */
+#nav-sidebar [class*="user"],
+#nav-sidebar [class*="avatar"],
+#nav-sidebar [class*="profile"] {
+  color: rgba(255,255,255,0.75) !important;
+  border-top-color: rgba(255,255,255,0.08) !important;
+}
+#nav-sidebar [class*="user"] span,
+#nav-sidebar [class*="profile"] span {
+  color: rgba(255,255,255,0.75) !important;
+}
+
+/* ── HEADER / TOP BAR ────────────────────────────────────────── */
+#header,
+[class*="topbar"],
+[class*="top-bar"] {
+  background-color: #0B1F3A !important;
+}
+#header * { color: rgba(255,255,255,0.9) !important; }
+#header a { color: rgba(255,255,255,0.9) !important; }
+#header a:hover { color: #C9A227 !important; }
+
+/* ── MAIN CONTENT AREA ──────────────────────────────────────── */
+#main,
+#content,
+#content-main,
+.main-content,
+[id="content"] {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+  background-color: #F7F8FA !important;
+}
+
+/* ── CONTENT HEADINGS ────────────────────────────────────────── */
+#content h1, #content h2, #content h3, #content h4,
+#content-main h1, #content-main h2,
+.content-title, .object-title,
+[class*="page-title"] {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+
+/* ── BREADCRUMBS ─────────────────────────────────────────────── */
+.breadcrumbs,
+.breadcrumbs a,
+.breadcrumbs span,
+[class*="breadcrumb"] {
+  color: #6B7280 !important;
+  opacity: 1 !important;
+}
+.breadcrumbs a:hover { color: #1F2937 !important; }
+
+/* ── CHANGE LIST / TABLES ────────────────────────────────────── */
+#result_list,
+#result_list th,
+#result_list td,
+.results th,
+.results td,
+table.module,
+table.module th,
+table.module td {
+  border-color: #E5E7EB !important;
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+#result_list thead th,
+#result_list thead th a,
+table.module thead th,
+table.module thead th a,
+.results thead th { color: #1F2937 !important; font-weight: 600 !important; opacity: 1 !important; }
+
+#result_list tbody td,
+#result_list tbody th,
+#result_list tbody td a,
+#result_list tbody th a,
+.results td a,
+.results th a { color: #1F2937 !important; opacity: 1 !important; }
+
+#result_list tbody tr:hover td,
+#result_list tbody tr:hover th { background: #FAFAFA !important; }
+
+/* Sorted column highlight */
+#result_list thead th.sorted a,
+.results thead th.sorted a { color: #C9A227 !important; }
+
+/* ── SEARCH / FILTER ─────────────────────────────────────────── */
+#toolbar label, #toolbar input,
+#searchbar, #changelist-search input,
+#changelist-search label { color: #1F2937 !important; opacity: 1 !important; }
+
+#changelist-filter h2,
+#changelist-filter h3 { color: #1F2937 !important; font-weight: 600 !important; opacity: 1 !important; }
+#changelist-filter li,
+#changelist-filter li a { color: #1F2937 !important; opacity: 1 !important; }
+#changelist-filter li.selected a { color: #C9A227 !important; font-weight: 600 !important; }
+
+/* ── ACTIONS BAR ─────────────────────────────────────────────── */
+.actions label,
+.actions select { color: #1F2937 !important; opacity: 1 !important; }
+
+/* ── FORM LABELS & FIELDSETS ────────────────────────────────── */
+.form-row label,
+fieldset label,
+.field label,
+label.required { color: #1F2937 !important; opacity: 1 !important; font-weight: 500 !important; }
+
+.helptext, p.help, .help, .form-row .help,
+.form-row .help-text, .field-help { color: #6B7280 !important; opacity: 1 !important; }
+
+fieldset h2,
+fieldset legend,
+.fieldset-title { color: #1F2937 !important; opacity: 1 !important; font-weight: 600 !important; }
+
+/* ── FORM INPUTS ─────────────────────────────────────────────── */
+input[type="text"], input[type="email"], input[type="url"],
+input[type="number"], input[type="password"], input[type="tel"],
+input[type="date"], input[type="datetime-local"],
+select, textarea {
+  color: #1F2937 !important;
+  background-color: #ffffff !important;
+  border-color: #D1D5DB !important;
+  opacity: 1 !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #C9A227 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(201,162,39,0.15) !important;
+}
+
+/* ── INLINE TABLES ───────────────────────────────────────────── */
+.inline-related h3,
+.inline-related h3 span,
+.tabular .original p,
+.tabular td,
+.tabular th { color: #1F2937 !important; opacity: 1 !important; }
+
+/* ── SUBMIT BUTTONS ──────────────────────────────────────────── */
+.submit-row input[type="submit"],
+.submit-row input[type="button"],
+input[name="_save"],
+input[name="_addanother"],
+input[name="_continue"] { opacity: 1 !important; }
+
+/* ── UNFOLD: override any low-opacity Tailwind text ─────────── */
+#content [class*="text-gray-"],
+#content [class*="text-slate-"],
+[class*="text-gray-400"],
+[class*="text-gray-500"] { color: #6B7280 !important; opacity: 1 !important; }
+
+[class*="text-gray-700"],
+[class*="text-gray-800"],
+[class*="text-gray-900"],
+[class*="text-slate-700"],
+[class*="text-slate-800"],
+[class*="text-slate-900"] { color: #1F2937 !important; opacity: 1 !important; }
+
+/* ── UNFOLD: card/module backgrounds ────────────────────────── */
+.module, .card,
+[class*="rounded"][class*="border"],
+[class*="bg-white"] { background-color: #ffffff !important; }
+
+/* ── UNFOLD: badges / pills that Unfold adds ─────────────────── */
+[class*="badge"], [class*="pill"] { opacity: 1 !important; }
+
+/* ── PAGINATION ──────────────────────────────────────────────── */
+.paginator a,
+.paginator span,
+[class*="paginator"] { color: #1F2937 !important; opacity: 1 !important; }
+.paginator a:hover { color: #C9A227 !important; }
+.paginator .current,
+[class*="paginator"] .active { color: #C9A227 !important; font-weight: 600 !important; }
+
+/* ── DATE HIERARCHY ──────────────────────────────────────────── */
+.xfull ul li,
+.xfull ul li a { color: #1F2937 !important; opacity: 1 !important; }
+
+/* ── IMAGE PREVIEWS ──────────────────────────────────────────── */
+.field-logo_preview img,
+.field-favicon_preview img,
+.field-image_preview img,
+.field-hero_preview img,
+.field-bg_preview img,
+.field-hero_image_preview img,
+.field-cover_thumb_field img,
+.field-slide_thumb img {
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  max-height: 160px;
+  width: auto;
+  display: block;
+  margin-top: 6px;
+}
+
+/* ── GOLD ACCENT: active links, focus, highlights ───────────── */
+a:focus-visible {
+  outline: 2px solid #C9A227 !important;
+  outline-offset: 2px;
+}
+#content a:not([class]):hover { color: #C9A227 !important; }
+
+/* ── ERROR MESSAGES ──────────────────────────────────────────── */
+.errornote, .errorlist li, .error-message { color: #DC2626 !important; opacity: 1 !important; }
+
+/* ── SUCCESS MESSAGES ────────────────────────────────────────── */
+.success, .successlist li { color: #15803D !important; opacity: 1 !important; }
+
+/* ── UNFOLD: sidebar collapsible chevrons ────────────────────── */
+#nav-sidebar [class*="chevron"],
+#nav-sidebar [class*="toggle"],
+#nav-sidebar button { color: rgba(255,255,255,0.55) !important; opacity: 1 !important; }
+
+/* ── DARK MODE PREVENTION (keep admin light) ─────────────────── */
+@media (prefers-color-scheme: dark) {
+  #main, #content, #content-main, .module { background-color: #F7F8FA !important; color: #1F2937 !important; }
+}
+
+/* ── LOGIN PAGE FIXES ─────────────────────────────────────────── */
+/* Reset ALL wildcard overrides on the login page */
+body.login,
+body.login *:not(svg):not(path):not(circle):not(polyline):not(line):not(rect) {
+  color: #1F2937 !important;
+  opacity: 1 !important;
+}
+body.login label,
+body.login .block,
+body.login span:not(.sr-only) {
+  color: #1F2937 !important;
+  font-weight: 500 !important;
+}
+/* Keep LIAFE CMS heading gold */
+body.login h1,
+body.login h1 * {
+  color: #C9A227 !important;
+}
+/* Keep "Return to site" link readable */
+body.login a {
+  color: #2563EB !important;
+}
+body.login input[type="text"],
+body.login input[type="password"],
+body.login input[type="email"] {
+  color: #1F2937 !important;
+  background: #ffffff !important;
+  border: 1px solid #D1D5DB !important;
+  border-radius: 6px !important;
+}
+body.login input[type="text"]::placeholder,
+body.login input[type="password"]::placeholder {
+  color: #9CA3AF !important;
+}
+/* Submit button — Unfold uses <button> not <input> */
+body.login button[type="submit"],
+body.login input[type="submit"] {
+  background: #2563EB !important;
+  background-color: #2563EB !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 24px !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+body.login button[type="submit"]:hover {
+  background: #1D4ED8 !important;
+  background-color: #1D4ED8 !important;
+}
+/* text-white classes used on submit button text should stay white */
+body.login button[type="submit"] *,
+body.login button[type="submit"] span {
+  color: #ffffff !important;
+}
+/* Any Tailwind text-white used inside the login card should still show */
+body.login [class*="text-white"]:not(button):not(button *) {
+  color: #1F2937 !important;
+}

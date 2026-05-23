@@ -1,0 +1,144 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if obj %}Edit Service{% else %}Add Service{% endif %}{% endblock %}
+{% block topbar_title %}{% if obj %}Edit Service{% else %}Add Service{% endif %}{% endblock %}
+{% block topbar_actions %}
+{% if obj %}<a href="{% url 'dashboard:service_detail' obj.pk %}" class="tb-btn tb-btn-outline">← Back to {{ obj.title }}</a>
+{% else %}<a href="{% url 'dashboard:services' %}" class="tb-btn tb-btn-outline">← Services</a>{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="{% url 'dashboard:services' %}">Services</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>{% if obj %}Edit{% else %}Add{% endif %}</span>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if form.errors %}
+  <div class="db-card" style="margin-bottom:16px;padding:12px 18px;border-left:3px solid var(--danger);background:#FEF2F2;">
+    <div style="font-weight:600;color:var(--danger);margin-bottom:6px;">Please fix the errors below:</div>
+    {% for field in form %}{% if field.errors %}<div style="font-size:13px;color:var(--danger);">{{ field.label }}: {{ field.errors|join:", " }}</div>{% endif %}{% endfor %}
+    {% if form.non_field_errors %}<div style="font-size:13px;color:var(--danger);">{{ form.non_field_errors|join:", " }}</div>{% endif %}
+  </div>
+  {% endif %}
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Basic Info</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field form-full">
+          <label class="form-label">Title <span class="required">*</span></label>
+          {{ form.title }}{% if form.title.errors %}<div class="form-error">{{ form.title.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Slug <span class="required">*</span></label>
+          {{ form.slug }}{% if form.slug.errors %}<div class="form-error">{{ form.slug.errors|join:", " }}</div>{% endif %}
+          <div class="form-hint">URL-friendly identifier, e.g. shariah-advisory</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Menu Title</label>
+          {{ form.menu_title }}
+          <div class="form-hint">Short label shown in the nav dropdown.</div>
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Short Description <span class="required">*</span></label>
+          {{ form.short_description }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Icon Class</label>{{ form.icon_class }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Order</label>{{ form.order }}
+        </div>
+        <div class="form-field">
+          <div class="check-row">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">Active</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Images</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Card Image</label>
+          <div class="file-input-wrap">
+            {{ form.image }}
+            {% if obj and obj.image %}<img src="{{ obj.image.url }}" class="img-preview" alt="">{% endif %}
+          </div>
+          <div class="form-hint">{{ form.image.help_text }}</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Hero Image</label>
+          <div class="file-input-wrap">
+            {{ form.hero_image }}
+            {% if obj and obj.hero_image %}<img src="{{ obj.hero_image.url }}" class="img-preview" alt="">{% endif %}
+          </div>
+          <div class="form-hint">{{ form.hero_image.help_text }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Service Page Hero</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Hero Title</label>{{ form.hero_title }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">Hero Subtitle</label>{{ form.hero_subtitle }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">Hero Description</label>{{ form.hero_description }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">Call to Action</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">CTA Title</label>{{ form.cta_title }}
+        </div>
+        <div class="form-field form-full">
+          <label class="form-label">CTA Description</label>{{ form.cta_description }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">CTA Button Text</label>{{ form.cta_button_text }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">CTA Button Link</label>{{ form.cta_button_link }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-card" style="margin-bottom:20px;">
+    <div class="db-card-header"><div class="db-card-title">SEO</div></div>
+    <div class="db-card-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">SEO Title</label>{{ form.seo_title }}
+        </div>
+        <div class="form-field">
+          <label class="form-label">SEO Description</label>{{ form.seo_description }}
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="tb-btn tb-btn-primary">{% if obj %}Save Changes{% else %}Create Service{% endif %}</button>
+      <a href="{% url 'dashboard:services' %}" class="tb-btn tb-btn-outline">Cancel</a>
+      {% if obj %}<a href="{% url 'dashboard:service_delete' obj.pk %}" class="tb-btn tb-btn-danger" style="margin-left:auto;">Delete</a>{% endif %}
+    </div>
+  </div>
+
+</form>
+{% endblock %}

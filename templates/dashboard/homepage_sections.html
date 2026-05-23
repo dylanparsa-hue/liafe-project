@@ -1,0 +1,49 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Homepage Sections{% endblock %}
+{% block topbar_title %}Homepage Sections{% endblock %}
+
+{% block content %}
+<div class="db-breadcrumb">
+  <a href="{% url 'dashboard:overview' %}">Dashboard</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  <span>Homepage Sections</span>
+</div>
+
+{% if sections %}
+<div class="section-grid">
+  {% for sec in sections %}
+  <div class="section-card">
+    <div class="section-card-name">{{ sec.get_section_name_display }}</div>
+    <div class="section-card-title">{{ sec.title|default:"(no title set)" }}</div>
+    {% if sec.subtitle %}<div class="section-card-sub">{{ sec.subtitle|truncatechars:60 }}</div>{% endif %}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+      <span class="badge {% if sec.is_active %}badge-green{% else %}badge-gray{% endif %}">
+        {% if sec.is_active %}Active{% else %}Hidden{% endif %}
+      </span>
+      {% if sec.image %}<span class="badge badge-blue">Has image</span>{% endif %}
+      {% if sec.background_image %}<span class="badge badge-purple">Has background</span>{% endif %}
+    </div>
+    <div class="section-card-footer">
+      <a href="{% url 'dashboard:homepage_section_edit' sec.pk %}" class="tbl-btn tbl-btn-primary" style="display:inline-flex;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit Section
+      </a>
+      {% if sec.section_name == 'about' %}
+      <a href="{% url 'dashboard:about_stats' %}" class="tbl-btn" style="display:inline-flex;gap:4px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Manage Stats
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="db-card">
+  <div class="empty-state">
+    <div class="empty-title">No sections found</div>
+    <div class="empty-text">Run <code>python manage.py seed_site</code> to create default sections.</div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
